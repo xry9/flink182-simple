@@ -227,7 +227,7 @@ public class CliFrontend {
 			final T clusterId = customCommandLine.getClusterId(commandLine);
 
 			final ClusterClient<T> client;
-
+			LOG.info("===runProgram===230==="+(clusterId == null && runOptions.getDetachedMode())+"==="+clusterDescriptor.getClass().getName());
 			// directly deploy the job if the cluster is started in job mode and detached
 			if (clusterId == null && runOptions.getDetachedMode()) {
 				int parallelism = runOptions.getParallelism() == -1 ? defaultParallelism : runOptions.getParallelism();
@@ -235,14 +235,14 @@ public class CliFrontend {
 				final JobGraph jobGraph = PackagedProgramUtils.createJobGraph(program, configuration, parallelism);
 
 				final ClusterSpecification clusterSpecification = customCommandLine.getClusterSpecification(commandLine);
-				client = clusterDescriptor.deployJobCluster(
-					clusterSpecification,
-					jobGraph,
-					runOptions.getDetachedMode());
+
+
+				client = clusterDescriptor.deployJobCluster(clusterSpecification, jobGraph, runOptions.getDetachedMode());
+
 
 				logAndSysout("Job has been submitted with JobID " + jobGraph.getJobID());
-
 				try {
+
 					client.shutdown();
 				} catch (Exception e) {
 					LOG.info("Could not properly shut down the client.", e);
@@ -809,9 +809,9 @@ public class CliFrontend {
 
 	protected void executeProgram(PackagedProgram program, ClusterClient<?> client, int parallelism) throws ProgramMissingJobException, ProgramInvocationException {
 		logAndSysout("Starting execution of program");
-
+		LOG.info("===executeProgram===812===");
 		final JobSubmissionResult result = client.run(program, parallelism);
-
+		LOG.info("===executeProgram===814===");
 		if (null == result) {
 			throw new ProgramMissingJobException("No JobSubmissionResult returned, please make sure you called " +
 				"ExecutionEnvironment.execute()");
@@ -1104,7 +1104,7 @@ public class CliFrontend {
 	 */
 	public static void main(final String[] args) {
 		EnvironmentInformation.logEnvironmentInfo(LOG, "Command Line Client", args);
-
+		LOG.info("===main===1107==="+Arrays.toString(args));
 		// 1. find the configuration directory
 		final String configurationDirectory = getConfigurationDirectoryFromEnv();
 
@@ -1117,9 +1117,9 @@ public class CliFrontend {
 			configurationDirectory);
 
 		try {
-			final CliFrontend cli = new CliFrontend(
-				configuration,
-				customCommandLines);
+
+
+			final CliFrontend cli = new CliFrontend(configuration, customCommandLines);
 
 			SecurityUtils.install(new SecurityConfiguration(cli.configuration));
 			int retCode = SecurityUtils.getInstalledContext()

@@ -49,12 +49,12 @@ public class StreamContextEnvironment extends StreamExecutionEnvironment {
 	@Override
 	public JobExecutionResult execute(String jobName) throws Exception {
 		Preconditions.checkNotNull(jobName, "Streaming Job name should not be null.");
-
 		StreamGraph streamGraph = this.getStreamGraph();
 		streamGraph.setJobName(jobName);
 
 		transformations.clear();
 
+		LOG.info("===execute===57==="+jobName+"==="+(ctx instanceof DetachedEnvironment));//try { Integer.parseInt("execute"); }catch (Exception e){LOG.error("===", e);}
 		// execute the programs
 		if (ctx instanceof DetachedEnvironment) {
 			LOG.warn("Job was executed in detached mode, the results will be available on completion.");

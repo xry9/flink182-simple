@@ -250,8 +250,8 @@ public class RestClusterClient<T> extends ClusterClient<T> implements NewCluster
 					jobGraph.getJobID(), ExceptionUtils.stripExecutionException(e));
 			}
 		} else {
-			final CompletableFuture<JobResult> jobResultFuture = jobSubmissionFuture.thenCompose(
-				ignored -> requestJobResult(jobGraph.getJobID()));
+
+			final CompletableFuture<JobResult> jobResultFuture = jobSubmissionFuture.thenCompose(ignored -> requestJobResult(jobGraph.getJobID()));
 
 			final JobResult jobResult;
 			try {
@@ -323,11 +323,12 @@ public class RestClusterClient<T> extends ClusterClient<T> implements NewCluster
 	public CompletableFuture<JobSubmissionResult> submitJob(@Nonnull JobGraph jobGraph) {
 		// we have to enable queued scheduling because slot will be allocated lazily
 		jobGraph.setAllowQueuedScheduling(true);
-
+		log.info("===submitJob===326===");
 		CompletableFuture<java.nio.file.Path> jobGraphFileFuture = CompletableFuture.supplyAsync(() -> {
 			try {
 				final java.nio.file.Path jobGraphFile = Files.createTempFile("flink-jobgraph", ".bin");
 				try (ObjectOutputStream objectOut = new ObjectOutputStream(Files.newOutputStream(jobGraphFile))) {
+					log.info("===submitJob===331==="+jobGraphFile);
 					objectOut.writeObject(jobGraph);
 				}
 				return jobGraphFile;
@@ -335,7 +336,6 @@ public class RestClusterClient<T> extends ClusterClient<T> implements NewCluster
 				throw new CompletionException(new FlinkException("Failed to serialize JobGraph.", e));
 			}
 		}, executorService);
-
 		CompletableFuture<Tuple2<JobSubmitRequestBody, Collection<FileUpload>>> requestFuture = jobGraphFileFuture.thenApply(jobGraphFile -> {
 			List<String> jarFileNames = new ArrayList<>(8);
 			List<JobSubmitRequestBody.DistributedCacheFile> artifactFileNames = new ArrayList<>(8);
@@ -353,14 +353,14 @@ public class RestClusterClient<T> extends ClusterClient<T> implements NewCluster
 				filesToUpload.add(new FileUpload(Paths.get(artifacts.getValue().filePath), RestConstants.CONTENT_TYPE_BINARY));
 			}
 
+
+
 			final JobSubmitRequestBody requestBody = new JobSubmitRequestBody(
-				jobGraphFile.getFileName().toString(),
-				jarFileNames,
-				artifactFileNames);
+				jobGraphFile.getFileName().toString(), jarFileNames, artifactFileNames);
 
 			return Tuple2.of(requestBody, Collections.unmodifiableCollection(filesToUpload));
 		});
-
+		log.info("===submitJob===363===");
 		final CompletableFuture<JobSubmitResponseBody> submissionFuture = requestFuture.thenCompose(
 			requestAndFileUploads -> sendRetriableRequest(
 				JobSubmitHeaders.getInstance(),
@@ -379,7 +379,7 @@ public class RestClusterClient<T> extends ClusterClient<T> implements NewCluster
 				log.warn("Could not delete temporary file {}.", jobGraphFile, e);
 			}
 		});
-
+		log.info("===submitJob===382===");
 		return submissionFuture
 			.thenApply(
 				(JobSubmitResponseBody jobSubmitResponseBody) -> new JobSubmissionResult(jobGraph.getJobID()))
@@ -716,13 +716,13 @@ public class RestClusterClient<T> extends ClusterClient<T> implements NewCluster
 	sendRetriableRequest(M messageHeaders, U messageParameters, R request, Collection<FileUpload> filesToUpload, Predicate<Throwable> retryPredicate) {
 		return retry(() -> getWebMonitorBaseUrl().thenCompose(webMonitorBaseUrl -> {
 			try {
+				log.info("===sendRetriableRequest===719===");
 				return restClient.sendRequest(webMonitorBaseUrl.getHost(), webMonitorBaseUrl.getPort(), messageHeaders, messageParameters, request, filesToUpload);
 			} catch (IOException e) {
 				throw new CompletionException(e);
 			}
 		}), retryPredicate);
 	}
-
 	private <C> CompletableFuture<C> retry(
 			CheckedSupplier<CompletableFuture<C>> operation,
 			Predicate<Throwable> retryPredicate) {

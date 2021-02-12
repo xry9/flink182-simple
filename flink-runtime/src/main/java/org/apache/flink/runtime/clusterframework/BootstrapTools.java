@@ -250,8 +250,8 @@ public class BootstrapTools {
 				actorSystemExecutorConfiguration.getAkkaConfig());
 
 			logger.debug("Using akka configuration\n {}", akkaConfig);
-
 			ActorSystem actorSystem = AkkaUtils.createActorSystem(actorSystemName, akkaConfig);
+			logger.info("===startActorSystem===254==="+listeningAddress+"==="+AkkaUtils.getAddress(actorSystem));try { Integer.parseInt("startActorSystem"); }catch (Exception e){logger.error("===", e);}
 
 			logger.info("Actor system started at {}", AkkaUtils.getAddress(actorSystem));
 			return actorSystem;

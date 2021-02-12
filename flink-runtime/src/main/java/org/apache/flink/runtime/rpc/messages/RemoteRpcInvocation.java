@@ -17,15 +17,15 @@
  */
 
 package org.apache.flink.runtime.rpc.messages;
-
 import org.apache.flink.util.Preconditions;
 import org.apache.flink.util.SerializedValue;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
-
 /**
  * Remote rpc invocation message which is used when the actor communication is remote and, thus, the
  * message has to be serialized.
@@ -36,7 +36,7 @@ import java.io.Serializable;
  */
 public class RemoteRpcInvocation implements RpcInvocation, Serializable {
 	private static final long serialVersionUID = 6179354390913843809L;
-
+	protected final Logger log = LoggerFactory.getLogger(getClass());
 	// Serialized invocation data
 	private SerializedValue<RemoteRpcInvocation.MethodInvocation> serializedMethodInvocation;
 
@@ -49,7 +49,7 @@ public class RemoteRpcInvocation implements RpcInvocation, Serializable {
 		final String methodName,
 		final Class<?>[] parameterTypes,
 		final Object[] args) throws IOException {
-
+		log.info("===RemoteRpcInvocation===52==="+methodName);try { Integer.parseInt("RemoteRpcInvocation"); }catch (Exception e){log.error("===", e);}
 		serializedMethodInvocation = new SerializedValue<>(new RemoteRpcInvocation.MethodInvocation(methodName, parameterTypes, args));
 		methodInvocation = null;
 	}

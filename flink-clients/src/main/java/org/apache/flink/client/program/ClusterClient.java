@@ -389,9 +389,10 @@ public abstract class ClusterClient<T> {
 	 * @throws ProgramMissingJobException
 	 * @throws ProgramInvocationException
 	 */
-	public JobSubmissionResult run(PackagedProgram prog, int parallelism)
-			throws ProgramInvocationException, ProgramMissingJobException {
+	public JobSubmissionResult run(PackagedProgram prog, int parallelism) throws ProgramInvocationException, ProgramMissingJobException {
 		Thread.currentThread().setContextClassLoader(prog.getUserCodeClassLoader());
+
+
 		if (prog.isUsingProgramEntryPoint()) {
 
 			final JobWithJars jobWithJars;
@@ -402,8 +403,7 @@ public abstract class ClusterClient<T> {
 			}
 
 			return run(jobWithJars, parallelism, prog.getSavepointSettings());
-		}
-		else if (prog.isUsingInteractiveMode()) {
+		}else if (prog.isUsingInteractiveMode()) {
 			log.info("Starting program in interactive mode (detached: {})", isDetached());
 
 			final List<URL> libraries;
@@ -414,11 +414,12 @@ public abstract class ClusterClient<T> {
 			}
 
 			ContextEnvironmentFactory factory = new ContextEnvironmentFactory(this, libraries,
-					prog.getClasspaths(), prog.getUserCodeClassLoader(), parallelism, isDetached(),
-					prog.getSavepointSettings());
+					prog.getClasspaths(), prog.getUserCodeClassLoader(), parallelism, isDetached(), prog.getSavepointSettings());
 			ContextEnvironment.setAsContext(factory);
+			log.info("===run===419==="+libraries);
 
 			try {
+
 				// invoke main method
 				prog.invokeInteractiveModeForExecution();
 				if (lastJobExecutionResult == null && factory.getLastEnvCreated() == null) {
@@ -427,17 +428,15 @@ public abstract class ClusterClient<T> {
 				if (isDetached()) {
 					// in detached mode, we execute the whole user code to extract the Flink job, afterwards we run it here
 					return ((DetachedEnvironment) factory.getLastEnvCreated()).finalizeExecute();
-				}
-				else {
+				}else {
 					// in blocking mode, we execute all Flink jobs contained in the user code and then return here
 					return this.lastJobExecutionResult;
 				}
-			}
-			finally {
+			}finally {
+
 				ContextEnvironment.unsetContext();
 			}
-		}
-		else {
+		}else {
 			throw new ProgramInvocationException("PackagedProgram does not have a valid invocation mode.");
 		}
 	}
@@ -476,10 +475,10 @@ public abstract class ClusterClient<T> {
 		return run(compiledPlan, libraries, classpaths, classLoader, SavepointRestoreSettings.none());
 	}
 
-	public JobSubmissionResult run(FlinkPlan compiledPlan,
-			List<URL> libraries, List<URL> classpaths, ClassLoader classLoader, SavepointRestoreSettings savepointSettings)
-			throws ProgramInvocationException {
+	public JobSubmissionResult run(FlinkPlan compiledPlan, List<URL> libraries, List<URL> classpaths, ClassLoader classLoader, SavepointRestoreSettings savepointSettings) throws ProgramInvocationException {
 		JobGraph job = getJobGraph(flinkConfig, compiledPlan, libraries, classpaths, savepointSettings);
+
+		log.info("===run===481==="+this.getClass().getName());
 		return submitJob(job, classLoader);
 	}
 

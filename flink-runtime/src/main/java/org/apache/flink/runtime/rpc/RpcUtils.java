@@ -20,7 +20,8 @@ package org.apache.flink.runtime.rpc;
 
 import org.apache.flink.api.common.time.Time;
 import org.apache.flink.runtime.concurrent.FutureUtils;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -29,12 +30,11 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
-
 /**
  * Utility functions for Flink's RPC implementation.
  */
 public class RpcUtils {
-
+	private static final Logger LOG = LoggerFactory.getLogger(RpcUtils.class);
 	/**
 	 * <b>HACK:</b> Set to 21474835 seconds, Akka's maximum delay (Akka 2.4.20). The value cannot be
 	 * higher or an {@link IllegalArgumentException} will be thrown during an RPC. Check the private
@@ -60,7 +60,7 @@ public class RpcUtils {
 
 			clazz = clazz.getSuperclass();
 		}
-
+		LOG.info("===extractImplementedRpcGateways===63==="+(clazz != null? clazz.getName():"null")+"==="+interfaces);
 		return interfaces;
 	}
 

@@ -539,7 +539,7 @@ public class TaskExecutor extends RpcEndpoint implements TaskExecutorGateway {
 				localStateStore,
 				taskRestore,
 				checkpointResponder);
-
+			log.info("===submitTask===542==="+jobInformation+"==="+taskInformation);
 			Task task = new Task(
 				jobInformation,
 				taskInformation,

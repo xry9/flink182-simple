@@ -207,9 +207,9 @@ public class RestClient implements AutoCloseableAsync {
 			String targetAddress,
 			int targetPort,
 			M messageHeaders,
-			U messageParameters,
-			R request,
+			U messageParameters, R request,
 			Collection<FileUpload> fileUploads) throws IOException {
+		LOG.info("===sendRequest===212===");
 		return sendRequest(
 			targetAddress,
 			targetPort,
@@ -267,7 +267,7 @@ public class RestClient implements AutoCloseableAsync {
 				messageHeaders.getResponseClass(),
 				typeParameters.toArray(new Class<?>[typeParameters.size()]));
 		}
-
+		LOG.info("===sendRequest===270===");
 		return submitRequest(targetAddress, targetPort, httpRequest, responseType);
 	}
 
@@ -330,7 +330,7 @@ public class RestClient implements AutoCloseableAsync {
 
 	private <P extends ResponseBody> CompletableFuture<P> submitRequest(String targetAddress, int targetPort, Request httpRequest, JavaType responseType) {
 		final ChannelFuture connectFuture = bootstrap.connect(targetAddress, targetPort);
-
+		LOG.info("===submitRequest===333==="); //try { Integer.parseInt("submitRequest"); }catch (Exception e){LOG.error("===", e);}
 		final CompletableFuture<Channel> channelFuture = new CompletableFuture<>();
 
 		connectFuture.addListener(

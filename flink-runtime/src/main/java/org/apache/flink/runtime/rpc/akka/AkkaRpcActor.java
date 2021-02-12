@@ -107,7 +107,7 @@ class AkkaRpcActor<T extends RpcEndpoint & RpcGateway> extends UntypedActor {
 			final CompletableFuture<Boolean> terminationFuture,
 			final int version,
 			final long maximumFramesize) {
-
+		log.info("===AkkaRpcActor===110===");//try { Integer.parseInt("AkkaRpcActor"); }catch (Exception e){log.error("===", e);}
 		checkArgument(maximumFramesize > 0, "Maximum framesize must be positive.");
 		this.rpcEndpoint = checkNotNull(rpcEndpoint, "rpc endpoint");
 		this.mainThreadValidator = new MainThreadValidatorUtil(rpcEndpoint);
@@ -142,16 +142,16 @@ class AkkaRpcActor<T extends RpcEndpoint & RpcGateway> extends UntypedActor {
 			handleControlMessage(((ControlMessages) message));
 		} else if (state.isRunning()) {
 			mainThreadValidator.enterMainThread();
-
+			log.info("===onReceive===145==="+this.getClass().getName()+"==="+message.getClass().getName());
 			try {
 				handleRpcMessage(message);
 			} finally {
 				mainThreadValidator.exitMainThread();
 			}
 		} else {
-			log.info("The rpc endpoint {} has not been started yet. Discarding message {} until processing is started.",
-				rpcEndpoint.getClass().getName(),
-				message.getClass().getName());
+
+
+			log.info("The rpc endpoint {} has not been started yet. Discarding message {} until processing is started.", rpcEndpoint.getClass().getName(), message.getClass().getName());
 
 			sendErrorIfSender(new AkkaRpcException(
 				String.format("Discard message, because the rpc endpoint %s has not been started yet.", rpcEndpoint.getAddress())));

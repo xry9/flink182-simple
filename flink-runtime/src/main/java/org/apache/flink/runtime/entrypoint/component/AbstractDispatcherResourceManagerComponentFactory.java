@@ -201,7 +201,7 @@ public abstract class AbstractDispatcherResourceManagerComponentFactory<T extend
 			log.debug("Starting Dispatcher.");
 			dispatcher.start();
 			dispatcherLeaderRetrievalService.start(dispatcherGatewayRetriever);
-
+			log.info("===create===204===" + resourceManager.getClass().getName() + "===" + resourceManager.getAddress() + "===" + dispatcher.getClass().getName() + "===" + dispatcher.getAddress() + "===" + webMonitorEndpoint.getAddress());
 			return createDispatcherResourceManagerComponent(
 				dispatcher,
 				resourceManager,

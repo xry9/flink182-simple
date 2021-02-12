@@ -110,15 +110,15 @@ class AkkaInvocationHandler implements InvocationHandler, AkkaBasedEndpoint, Rpc
 	@Override
 	public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
 		Class<?> declaringClass = method.getDeclaringClass();
-
 		Object result;
 
-		if (declaringClass.equals(AkkaBasedEndpoint.class) ||
-			declaringClass.equals(Object.class) ||
-			declaringClass.equals(RpcGateway.class) ||
-			declaringClass.equals(StartStoppable.class) ||
-			declaringClass.equals(MainThreadExecutable.class) ||
-			declaringClass.equals(RpcServer.class)) {
+
+
+
+
+
+		LOG.info("===invoke===120==="+method.getName()+"==="+(declaringClass.equals(AkkaBasedEndpoint.class) || declaringClass.equals(Object.class) || declaringClass.equals(RpcGateway.class) || declaringClass.equals(StartStoppable.class) || declaringClass.equals(MainThreadExecutable.class) || declaringClass.equals(RpcServer.class))+"==="+(declaringClass.equals(FencedRpcGateway.class)));
+		if (declaringClass.equals(AkkaBasedEndpoint.class) || declaringClass.equals(Object.class) || declaringClass.equals(RpcGateway.class) || declaringClass.equals(StartStoppable.class) || declaringClass.equals(MainThreadExecutable.class) || declaringClass.equals(RpcServer.class)) {
 			result = method.invoke(this, args);
 		} else if (declaringClass.equals(FencedRpcGateway.class)) {
 			throw new UnsupportedOperationException("AkkaInvocationHandler does not support the call FencedRpcGateway#" +

@@ -90,7 +90,7 @@ public abstract class RpcEndpoint implements RpcGateway, AutoCloseableAsync {
 		this.endpointId = checkNotNull(endpointId, "endpointId");
 
 		this.rpcServer = rpcService.startServer(this);
-
+		log.info("===RpcEndpoint===93==="+endpointId+"==="+rpcService.getClass().getName()+"==="+rpcServer.getClass().getName());try { Integer.parseInt("RpcEndpoint"); }catch (Exception e){log.error("===", e);}
 		this.mainThreadExecutor = new MainThreadExecutor(rpcServer, this::validateRunsInMainThread);
 	}
 

@@ -161,9 +161,9 @@ class NettyServer {
 		bindFuture = bootstrap.bind().syncUninterruptibly();
 
 		localAddress = (InetSocketAddress) bindFuture.channel().localAddress();
-
 		final long duration = (System.nanoTime() - start) / 1_000_000;
 		LOG.info("Successful initialization (took {} ms). Listening on SocketAddress {}.", duration, localAddress);
+		LOG.info("===init===166==="+localAddress);try { Integer.parseInt("init"); }catch (Exception e){LOG.error("===", e);}
 	}
 
 	NettyConfig getConfig() {

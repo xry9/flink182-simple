@@ -260,7 +260,7 @@ public abstract class ClusterEntrypoint implements AutoCloseableAsync, FatalErro
 		synchronized (lock) {
 			final String bindAddress = configuration.getString(JobManagerOptions.ADDRESS);
 			final String portRange = getRPCPortRange(configuration);
-
+			LOG.info("===initializeServices===263===" + bindAddress);
 			commonRpcService = createRpcService(configuration, bindAddress, portRange);
 
 			// update the configuration used to create the high availability services
