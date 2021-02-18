@@ -20,6 +20,8 @@ package org.apache.flink.runtime.rest.handler.router;
 
 import org.apache.flink.shaded.netty4.io.netty.handler.codec.http.HttpMethod;
 import org.apache.flink.shaded.netty4.io.netty.handler.codec.http.QueryStringDecoder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -86,11 +88,9 @@ import java.util.Set;
  * </pre>
  */
 public class Router<T> {
-	private final Map<HttpMethod, MethodlessRouter<T>> routers =
-		new HashMap<HttpMethod, MethodlessRouter<T>>();
-
-	private final MethodlessRouter<T> anyMethodRouter =
-		new MethodlessRouter<T>();
+	private static final Logger LOG = LoggerFactory.getLogger(Router.class);
+	private final Map<HttpMethod, MethodlessRouter<T>> routers = new HashMap<HttpMethod, MethodlessRouter<T>>();
+	private final MethodlessRouter<T> anyMethodRouter = new MethodlessRouter<T>();
 
 	private T notFound;
 
@@ -173,9 +173,9 @@ public class Router<T> {
 	 */
 	public Router<T> addRoute(HttpMethod method, String pathPattern, T target) {
 		getMethodlessRouter(method).addRoute(pathPattern, target);
+		//LOG.info("===addRoute===176==="+method+"==="+pathPattern);//+"==="+target
 		return this;
 	}
-
 	//--------------------------------------------------------------------------
 
 	/**

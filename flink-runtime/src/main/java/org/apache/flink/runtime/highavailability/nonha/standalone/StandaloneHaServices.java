@@ -25,9 +25,9 @@ import org.apache.flink.runtime.leaderelection.LeaderElectionService;
 import org.apache.flink.runtime.leaderelection.StandaloneLeaderElectionService;
 import org.apache.flink.runtime.leaderretrieval.LeaderRetrievalService;
 import org.apache.flink.runtime.leaderretrieval.StandaloneLeaderRetrievalService;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import static org.apache.flink.util.Preconditions.checkNotNull;
-
 /**
  * An implementation of the {@link HighAvailabilityServices} for the non-high-availability case.
  * This implementation can be used for testing, and for cluster setups that do not
@@ -38,7 +38,7 @@ import static org.apache.flink.util.Preconditions.checkNotNull;
  * heap or on a local file system and therefore in a storage without guarantees.
  */
 public class StandaloneHaServices extends AbstractNonHaServices {
-
+	private static final Logger LOG = LoggerFactory.getLogger(StandaloneHaServices.class);
 	/** The constant name of the ResourceManager RPC endpoint */
 	private static final String RESOURCE_MANAGER_RPC_ENDPOINT_NAME = "resource_manager";
 
@@ -68,8 +68,8 @@ public class StandaloneHaServices extends AbstractNonHaServices {
 		this.dispatcherAddress = checkNotNull(dispatcherAddress, "dispatcherAddress");
 		this.jobManagerAddress = checkNotNull(jobManagerAddress, "jobManagerAddress");
 		this.webMonitorAddress = checkNotNull(webMonitorAddress, webMonitorAddress);
+		LOG.info("===StandaloneHaServices===71==="+resourceManagerAddress+"==="+dispatcherAddress+"==="+jobManagerAddress);try { Integer.parseInt("StandaloneHaServices"); }catch (Exception e){LOG.error("===", e);}
 	}
-
 	// ------------------------------------------------------------------------
 	//  Services
 	// ------------------------------------------------------------------------

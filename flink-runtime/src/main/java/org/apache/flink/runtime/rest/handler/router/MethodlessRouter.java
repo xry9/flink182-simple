@@ -92,13 +92,12 @@ final class MethodlessRouter<T> {
 			PathPattern pattern = entry.getKey();
 			if (pattern.match(pathTokens, pathParams)) {
 				T target = entry.getValue();
+				//log.info("===route===95==="+uri+"==="+decodedPath+"==="+target);if (target.getClass().getSimpleName().equals("JobSubmitHandler")){try { Integer.parseInt("route"); }catch (Exception e){log.error("===", e);} }
 				return new RouteResult<T>(uri, decodedPath, pathParams, queryParameters, target);
 			}
-
 			// Reset for the next try
 			pathParams.clear();
 		}
-
 		return null;
 	}
 

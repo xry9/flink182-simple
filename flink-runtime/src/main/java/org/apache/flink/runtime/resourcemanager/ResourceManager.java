@@ -396,8 +396,8 @@ public abstract class ResourceManager<WorkerType extends ResourceIDRetrievable>
 	@Override
 	public CompletableFuture<Acknowledge> sendSlotReport(ResourceID taskManagerResourceId, InstanceID taskManagerRegistrationId, SlotReport slotReport, Time timeout) {
 		final WorkerRegistration<WorkerType> workerTypeWorkerRegistration = taskExecutors.get(taskManagerResourceId);
-
 		if (workerTypeWorkerRegistration.getInstanceID().equals(taskManagerRegistrationId)) {
+			log.info("===sendSlotReport===400==="+slotManager.getClass().getName()+"==="+workerTypeWorkerRegistration.getClass().getName()+"==="+slotReport.getClass().getName());
 			slotManager.registerTaskManager(workerTypeWorkerRegistration, slotReport);
 			return CompletableFuture.completedFuture(Acknowledge.get());
 		} else {
@@ -578,7 +578,7 @@ public abstract class ResourceManager<WorkerType extends ResourceIDRetrievable>
 	public CompletableFuture<TaskManagerInfo> requestTaskManagerInfo(ResourceID resourceId, Time timeout) {
 
 		final WorkerRegistration<WorkerType> taskExecutor = taskExecutors.get(resourceId);
-
+		log.info("===requestTaskManagerInfo===581==="+resourceId+"==="+taskExecutors);
 		if (taskExecutor == null) {
 			return FutureUtils.completedExceptionally(new UnknownTaskExecutorException(resourceId));
 		} else {

@@ -33,6 +33,8 @@ import org.apache.flink.util.Preconditions;
 
 import akka.actor.ActorRef;
 import akka.pattern.Patterns;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nullable;
 
@@ -43,15 +45,13 @@ import java.util.concurrent.CompletableFuture;
 import java.util.function.Supplier;
 
 import static org.apache.flink.util.Preconditions.checkNotNull;
-
 /**
  * Fenced extension of the {@link AkkaInvocationHandler}. This invocation handler will be used in combination
  * with the {@link FencedRpcEndpoint}. The fencing is done by wrapping all messages in a {@link FencedMessage}.
- *
  * @param <F> type of the fencing token
  */
 public class FencedAkkaInvocationHandler<F extends Serializable> extends AkkaInvocationHandler implements FencedMainThreadExecutable, FencedRpcGateway<F> {
-
+	private static final Logger LOG = LoggerFactory.getLogger(FencedAkkaInvocationHandler.class);
 	private final Supplier<F> fencingTokenSupplier;
 
 	public FencedAkkaInvocationHandler(
@@ -70,7 +70,7 @@ public class FencedAkkaInvocationHandler<F extends Serializable> extends AkkaInv
 	@Override
 	public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
 		Class<?> declaringClass = method.getDeclaringClass();
-
+		LOG.info("===invoke===73==="+method.getName()+"==="+proxy.getClass().getName());
 		if (declaringClass.equals(FencedMainThreadExecutable.class) ||
 			declaringClass.equals(FencedRpcGateway.class)) {
 			return method.invoke(this, args);

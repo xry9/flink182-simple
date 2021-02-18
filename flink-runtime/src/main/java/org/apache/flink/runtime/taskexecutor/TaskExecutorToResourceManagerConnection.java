@@ -31,12 +31,12 @@ import org.apache.flink.runtime.resourcemanager.ResourceManagerId;
 import org.apache.flink.runtime.rpc.RpcService;
 
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 
 import static org.apache.flink.util.Preconditions.checkNotNull;
-
 /**
  * The connection between a TaskExecutor and the ResourceManager.
  */
@@ -116,7 +116,7 @@ public class TaskExecutorToResourceManagerConnection
 
 	private static class ResourceManagerRegistration
 			extends RetryingRegistration<ResourceManagerId, ResourceManagerGateway, TaskExecutorRegistrationSuccess> {
-
+		protected final Logger log = LoggerFactory.getLogger(ResourceManagerRegistration.class);
 		private final String taskExecutorAddress;
 
 		private final ResourceID resourceID;
@@ -146,8 +146,8 @@ public class TaskExecutorToResourceManagerConnection
 		@Override
 		protected CompletableFuture<RegistrationResponse> invokeRegistration(
 				ResourceManagerGateway resourceManager, ResourceManagerId fencingToken, long timeoutMillis) throws Exception {
-
 			Time timeout = Time.milliseconds(timeoutMillis);
+			log.info("===invokeRegistration===150==="+resourceManager.getAddress()+"==="+resourceManager.getClass().getName());//try { Integer.parseInt("invokeRegistration"); }catch (Exception e){log.error("===", e);}
 			return resourceManager.registerTaskExecutor(
 				taskExecutorAddress,
 				resourceID,

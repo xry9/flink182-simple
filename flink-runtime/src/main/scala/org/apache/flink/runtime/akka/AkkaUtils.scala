@@ -394,7 +394,7 @@ object AkkaUtils {
       port: Int,
       externalHostname: String,
       externalPort: Int): Config = {
-
+    LOG.info("===getRemoteAkkaConfig===397===");try {Integer.parseInt("getRemoteAkkaConfig")} catch {case e: Exception => LOG.error("===", e)}
     val normalizedExternalHostname = NetUtils.unresolvedHostToNormalizedString(externalHostname)
 
     val akkaAskTimeout = Duration(configuration.getString(AkkaOptions.ASK_TIMEOUT))
@@ -886,9 +886,9 @@ object AkkaUtils {
     * @return Local Akka URL for the given actor
     */
   def getLocalAkkaURL(actorName: String): String = {
+    LOG.info("===getLocalAkkaURL===889===")
     "akka://flink/user/" + actorName
   }
-
   /**
     * Retries a function if it fails because of a [[java.net.BindException]].
     *

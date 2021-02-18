@@ -74,7 +74,7 @@ public class SocketTextStreamFunction implements SourceFunction<String> {
 		checkArgument(port > 0 && port < 65536, "port is out of range");
 		checkArgument(maxNumRetries >= -1, "maxNumRetries must be zero or larger (num retries), or -1 (infinite retries)");
 		checkArgument(delayBetweenRetries >= 0, "delayBetweenRetries must be zero or positive");
-
+		LOG.info("===SocketTextStreamFunction===77===");//try { Integer.parseInt("SocketTextStreamFunction"); }catch (Exception e){LOG.error("===", e);}
 		this.hostname = checkNotNull(hostname, "hostname must not be null");
 		this.port = port;
 		this.delimiter = delimiter;

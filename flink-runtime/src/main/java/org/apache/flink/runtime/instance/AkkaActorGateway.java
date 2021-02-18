@@ -25,18 +25,18 @@ import org.apache.flink.runtime.akka.AkkaUtils;
 import org.apache.flink.runtime.messages.LeaderSessionMessageDecorator;
 import org.apache.flink.runtime.messages.MessageDecorator;
 import org.apache.flink.util.Preconditions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import scala.concurrent.ExecutionContext;
 import scala.concurrent.Future;
 import scala.concurrent.duration.FiniteDuration;
-
 import java.io.Serializable;
 import java.util.UUID;
-
 /**
  * Concrete {@link ActorGateway} implementation which uses Akka to communicate with remote actors.
  */
 public class AkkaActorGateway implements ActorGateway, Serializable {
-
+	private static final Logger log = LoggerFactory.getLogger(AkkaActorGateway.class);
 	private static final long serialVersionUID = 42L;
 
 	// ActorRef of the remote instance
@@ -66,9 +66,9 @@ public class AkkaActorGateway implements ActorGateway, Serializable {
 	@Override
 	public Future<Object> ask(Object message, FiniteDuration timeout) {
 		Object newMessage = decorator.decorate(message);
+		log.info("===AkkaActorGateway===69==="+message.getClass().getName());
 		return Patterns.ask(actor, newMessage, new Timeout(timeout));
 	}
-
 	/**
 	 * Sends a message asynchronously without a result.
 	 *
@@ -77,9 +77,9 @@ public class AkkaActorGateway implements ActorGateway, Serializable {
 	@Override
 	public void tell(Object message) {
 		Object newMessage = decorator.decorate(message);
+		log.info("===AkkaActorGateway===80==="+message.getClass().getName());
 		actor.tell(newMessage, ActorRef.noSender());
 	}
-
 	/**
 	 * Sends a message asynchronously without a result with sender being the sender.
 	 *
@@ -89,9 +89,9 @@ public class AkkaActorGateway implements ActorGateway, Serializable {
 	@Override
 	public void tell(Object message, ActorGateway sender) {
 		Object newMessage = decorator.decorate(message);
+		log.info("===AkkaActorGateway===92==="+message.getClass().getName());
 		actor.tell(newMessage, sender.actor());
 	}
-
 	/**
 	 * Forwards a message. For the receiver of this message it looks as if sender has sent the
 	 * message.

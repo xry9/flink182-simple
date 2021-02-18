@@ -60,7 +60,7 @@ public class RpcUtils {
 
 			clazz = clazz.getSuperclass();
 		}
-		LOG.info("===extractImplementedRpcGateways===63==="+(clazz != null? clazz.getName():"null")+"==="+interfaces);
+		//LOG.info("===extractImplementedRpcGateways===63==="+(clazz != null? clazz.getName():"null")+"==="+interfaces);
 		return interfaces;
 	}
 

@@ -64,15 +64,15 @@ public abstract class LeaderRetrievalHandler<T extends RestfulGateway> extends S
 		this.leaderRetriever = Preconditions.checkNotNull(leaderRetriever);
 		this.timeout = Preconditions.checkNotNull(timeout);
 		this.responseHeaders = Preconditions.checkNotNull(responseHeaders);
+		//logger.info("===LeaderRetrievalHandler===67==="+this.getClass().getName());//try { Integer.parseInt("LeaderRetrievalHandler"); }catch (Exception e){logger.error("===", e);}
 	}
-
 	@Override
 	protected void channelRead0(
 		ChannelHandlerContext channelHandlerContext,
 		RoutedRequest routedRequest) {
 
 		HttpRequest request = routedRequest.getRequest();
-
+		//logger.info("===channelRead0===75==="+request.uri()+"==="+this.getClass().getName());try { Integer.parseInt("channelRead0"); }catch (Exception e){logger.error("===", e);}
 		OptionalConsumer<? extends T> optLeaderConsumer = OptionalConsumer.of(leaderRetriever.getNow());
 
 		optLeaderConsumer.ifPresent(

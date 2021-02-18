@@ -30,14 +30,14 @@ import org.apache.flink.runtime.messages.Acknowledge;
 import org.apache.flink.runtime.messages.StackTraceSampleResponse;
 import org.apache.flink.runtime.taskexecutor.TaskExecutorGateway;
 import org.apache.flink.util.Preconditions;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import java.util.concurrent.CompletableFuture;
-
 /**
  * Implementation of the {@link TaskManagerGateway} for Flink's RPC system.
  */
 public class RpcTaskManagerGateway implements TaskManagerGateway {
-
+	private static final Logger LOG = LoggerFactory.getLogger(RpcTaskManagerGateway.class);
 	private final TaskExecutorGateway taskExecutorGateway;
 
 	private final JobMasterId jobMasterId;
@@ -45,8 +45,8 @@ public class RpcTaskManagerGateway implements TaskManagerGateway {
 	public RpcTaskManagerGateway(TaskExecutorGateway taskExecutorGateway, JobMasterId jobMasterId) {
 		this.taskExecutorGateway = Preconditions.checkNotNull(taskExecutorGateway);
 		this.jobMasterId = Preconditions.checkNotNull(jobMasterId);
+		LOG.info("===RpcTaskManagerGateway===48==="+taskExecutorGateway.getClass().getName()+"===="+getAddress());try { Integer.parseInt("taskExecutorGateway"); }catch (Exception e){LOG.error("===", e);}
 	}
-
 	@Override
 	public String getAddress() {
 		return taskExecutorGateway.getAddress();
@@ -72,9 +72,9 @@ public class RpcTaskManagerGateway implements TaskManagerGateway {
 
 	@Override
 	public CompletableFuture<Acknowledge> submitTask(TaskDeploymentDescriptor tdd, Time timeout) {
+		LOG.info("===submitTask===75==="+taskExecutorGateway.getClass().getName());//try { Integer.parseInt("submitTask"); }catch (Exception e){LOG.error("===", e);}
 		return taskExecutorGateway.submitTask(tdd, jobMasterId, timeout);
 	}
-
 	@Override
 	public CompletableFuture<Acknowledge> stopTask(ExecutionAttemptID executionAttemptID, Time timeout) {
 		return taskExecutorGateway.stopTask(executionAttemptID, timeout);

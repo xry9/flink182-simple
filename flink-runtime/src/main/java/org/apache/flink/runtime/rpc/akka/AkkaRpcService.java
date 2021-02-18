@@ -105,7 +105,7 @@ public class AkkaRpcService implements RpcService {
 	private volatile boolean stopped;
 
 	public AkkaRpcService(final ActorSystem actorSystem, final AkkaRpcServiceConfiguration configuration) {
-		LOG.info("===AkkaRpcService===108==="+actorSystem);//try { Integer.parseInt("actorSystem"); }catch (Exception e){LOG.error("===", e);}
+		LOG.info("===AkkaRpcService===108==="+actorSystem);try { Integer.parseInt("actorSystem"); }catch (Exception e){LOG.error("===", e);}
 		this.actorSystem = checkNotNull(actorSystem, "actor system");
 		this.configuration = checkNotNull(configuration, "akka rpc service configuration");
 		Address actorSystemAddress = AkkaUtils.getAddress(actorSystem);
@@ -152,13 +152,13 @@ public class AkkaRpcService implements RpcService {
 	public <C extends RpcGateway> CompletableFuture<C> connect(
 			final String address,
 			final Class<C> clazz) {
-		LOG.info("===connect===155==="+clazz.getName()+"==="+address);try { Integer.parseInt("connect"); }catch (Exception e){LOG.error("===", e);}
+		LOG.info("===connect===155==="+clazz.getName()+"==="+address);//try { Integer.parseInt("connect"); }catch (Exception e){LOG.error("===", e);}
 		return connectInternal(
 			address,
 			clazz,
 			(ActorRef actorRef) -> {
 				Tuple2<String, String> addressHostname = extractAddressHostname(actorRef);
-				LOG.info("===connect===161==="+clazz.getName()+"==="+address+"==="+actorRef.getClass().getName());try { Integer.parseInt("connect"); }catch (Exception e){LOG.error("===", e);}
+				//LOG.info("===connect===161==="+clazz.getName()+"==="+address+"==="+actorRef.getClass().getName());//try { Integer.parseInt("connect"); }catch (Exception e){LOG.error("===", e);}
 				return new AkkaInvocationHandler(
 					addressHostname.f0,
 					addressHostname.f1,
@@ -195,7 +195,7 @@ public class AkkaRpcService implements RpcService {
 
 		CompletableFuture<Void> terminationFuture = new CompletableFuture<>();
 		final Props akkaRpcActorProps;
-
+		LOG.info("===startServer===198==="+rpcEndpoint.getClass().getName()+"==="+(rpcEndpoint instanceof FencedRpcEndpoint));try { Integer.parseInt("startServer"); }catch (Exception e){LOG.error("===", e);}
 		if (rpcEndpoint instanceof FencedRpcEndpoint) {
 			akkaRpcActorProps = Props.create(
 				FencedAkkaRpcActor.class,
@@ -211,33 +211,32 @@ public class AkkaRpcService implements RpcService {
 				getVersion(),
 				configuration.getMaximumFramesize());
 		}
-
 		ActorRef actorRef;
-
 		synchronized (lock) {
 			checkState(!stopped, "RpcService is stopped");
 			actorRef = actorSystem.actorOf(akkaRpcActorProps, rpcEndpoint.getEndpointId());
 			actors.put(actorRef, rpcEndpoint);
 		}
-		LOG.info("===startServer===222==="+rpcEndpoint.getClass().getName()+"==="+rpcEndpoint.getEndpointId());try { Integer.parseInt("AkkaRpcService"); }catch (Exception e){LOG.error("===", e);}
-		LOG.info("Starting RPC endpoint for {} at {} .", rpcEndpoint.getClass().getName(), actorRef.path());
 
+		LOG.info("===startServer===221==="+actorRef.getClass().getName()+"==="+actorSystem.getClass().getName()+"==="+actorSystem.provider().getClass().getName());
+
+		LOG.info("Starting RPC endpoint for {} at {} .", rpcEndpoint.getClass().getName(), actorRef.path());
 		final String akkaAddress = AkkaUtils.getAkkaURL(actorSystem, actorRef);
 		final String hostname;
 		Option<String> host = actorRef.path().address().host();
+		LOG.info("===startServer===227==="+actorSystem.provider().getDefaultAddress()+"==="+rpcEndpoint.getClass().getName()+"==="+rpcEndpoint.getEndpointId()+"==="+actorRef+"==="+(host.isEmpty()?"lh":host.get()));//try { Integer.parseInt("AkkaRpcService"); }catch (Exception e){LOG.error("===", e);}
 		if (host.isEmpty()) {
 			hostname = "localhost";
 		} else {
 			hostname = host.get();
 		}
-
 		Set<Class<?>> implementedRpcGateways = new HashSet<>(RpcUtils.extractImplementedRpcGateways(rpcEndpoint.getClass()));
 
 		implementedRpcGateways.add(RpcServer.class);
 		implementedRpcGateways.add(AkkaBasedEndpoint.class);
 
 		final InvocationHandler akkaInvocationHandler;
-
+		LOG.info("===startServer===240==="+(rpcEndpoint instanceof FencedRpcEndpoint));
 		if (rpcEndpoint instanceof FencedRpcEndpoint) {
 			// a FencedRpcEndpoint needs a FencedAkkaInvocationHandler
 			akkaInvocationHandler = new FencedAkkaInvocationHandler<>(
@@ -268,9 +267,9 @@ public class AkkaRpcService implements RpcService {
 		@SuppressWarnings("unchecked")
 		RpcServer server = (RpcServer) Proxy.newProxyInstance(
 			classLoader,
-			implementedRpcGateways.toArray(new Class<?>[implementedRpcGateways.size()]),
-			akkaInvocationHandler);
-		LOG.info("===startServer===273==="+akkaInvocationHandler.getClass().getName());
+			implementedRpcGateways.toArray(new Class<?>[implementedRpcGateways.size()]), akkaInvocationHandler);
+
+		LOG.info("===startServer===273==="+server.getClass().getName()+"==="+akkaInvocationHandler.getClass().getName());
 		return server;
 	}
 
@@ -402,9 +401,9 @@ public class AkkaRpcService implements RpcService {
 
 	@Override
 	public void execute(Runnable runnable) {
+		LOG.info("===execute===405==="+runnable.getClass().getName());try { Integer.parseInt("execute"); }catch (Exception e){LOG.error("===", e);}
 		actorSystem.dispatcher().execute(runnable);
 	}
-
 	@Override
 	public <T> CompletableFuture<T> execute(Callable<T> callable) {
 		Future<T> scalaFuture = Futures.<T>future(callable, actorSystem.dispatcher());
@@ -443,7 +442,7 @@ public class AkkaRpcService implements RpcService {
 		final Future<ActorIdentity> identify = Patterns
 			.ask(actorSel, new Identify(42), configuration.getTimeout().toMilliseconds())
 			.<ActorIdentity>mapTo(ClassTag$.MODULE$.<ActorIdentity>apply(ActorIdentity.class));
-		LOG.info("===connectInternal===446==="+address+"==="+actorSel.getClass().getName()+"==="+identify.getClass().getName());
+		LOG.info("===connectInternal===446==="+address+"==="+actorSel.getClass().getName()+"==="+identify.getClass().getName());try { Integer.parseInt("connectInternal"); }catch (Exception e){LOG.error("===", e);}
 		final CompletableFuture<ActorIdentity> identifyFuture = FutureUtils.toJava(identify);
 
 		final CompletableFuture<ActorRef> actorRefFuture = identifyFuture.thenApply(
@@ -460,12 +459,12 @@ public class AkkaRpcService implements RpcService {
 				Patterns
 					.ask(actorRef, new RemoteHandshakeMessage(clazz, getVersion()), configuration.getTimeout().toMilliseconds())
 					.<HandshakeSuccessMessage>mapTo(ClassTag$.MODULE$.<HandshakeSuccessMessage>apply(HandshakeSuccessMessage.class))));
-		LOG.info("===connectInternal===463===");try{ Integer.parseInt("connectInternal"); }catch (Exception e){LOG.error("===", e);}
+		//LOG.info("===connectInternal===463===");//try{ Integer.parseInt("connectInternal"); }catch (Exception e){LOG.error("===", e);}
 		return actorRefFuture.thenCombineAsync(
 			handshakeFuture,
 			(ActorRef actorRef, HandshakeSuccessMessage ignored) -> {
 				InvocationHandler invocationHandler = invocationHandlerFactory.apply(actorRef);
-				LOG.info("===connectInternal===468==="+actorRef.getClass().getName());try{ Integer.parseInt("connectInternal"); }catch (Exception e){LOG.error("===", e);}
+				LOG.info("===connectInternal===468==="+actorRef.getClass().getName()+"==="+actorRef+"==="+invocationHandler.getClass().getName()+"==="+clazz.getName());//try{ Integer.parseInt("connectInternal"); }catch (Exception e){LOG.error("===", e);}
 				// Rather than using the System ClassLoader directly, we derive the ClassLoader
 				// from this class . That works better in cases where Flink runs embedded and all Flink
 				// code is loaded dynamically (for example from an OSGI bundle) through a custom ClassLoader

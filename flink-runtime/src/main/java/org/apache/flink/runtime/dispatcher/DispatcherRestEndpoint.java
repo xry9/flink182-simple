@@ -118,7 +118,7 @@ public class DispatcherRestEndpoint extends WebMonitorEndpoint<DispatcherGateway
 		} else {
 			log.info("Web-based job submission is not enabled.");
 		}
-
+		log.info("===initializeHandlers===121==="+jobSubmitHandler.getMessageHeaders()+"==="+jobSubmitHandler);
 		handlers.add(Tuple2.of(jobSubmitHandler.getMessageHeaders(), jobSubmitHandler));
 
 		return handlers;

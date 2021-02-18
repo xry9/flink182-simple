@@ -125,8 +125,8 @@ public class JobManagerRunner implements LeaderContender, OnCompletionActions, A
 
 			// libraries and class loader first
 			try {
-				libraryCacheManager.registerJob(
-						jobGraph.getJobID(), jobGraph.getUserJarBlobKeys(), jobGraph.getClasspaths());
+				libraryCacheManager.registerJob(jobGraph.getJobID(), jobGraph.getUserJarBlobKeys(), jobGraph.getClasspaths());
+
 			} catch (IOException e) {
 				throw new Exception("Cannot set up the user code libraries: " + e.getMessage(), e);
 			}
@@ -139,7 +139,7 @@ public class JobManagerRunner implements LeaderContender, OnCompletionActions, A
 			// high availability services next
 			this.runningJobsRegistry = haServices.getRunningJobsRegistry();
 			this.leaderElectionService = haServices.getJobManagerLeaderElectionService(jobGraph.getJobID());
-
+			log.info("===JobManagerRunner===142==="+leaderElectionService.getClass().getName());
 			this.leaderGatewayFuture = new CompletableFuture<>();
 
 			// now start the JobManager

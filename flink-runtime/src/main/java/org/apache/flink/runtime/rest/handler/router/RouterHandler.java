@@ -80,7 +80,7 @@ public class RouterHandler extends SimpleChannelInboundHandler<HttpRequest> {
 		HttpMethod method = httpRequest.getMethod();
 		QueryStringDecoder qsd = new QueryStringDecoder(httpRequest.uri());
 		RouteResult<?> routeResult = router.route(method, qsd.path(), qsd.parameters());
-
+		//LOG.info("===channelRead0===83==="+method+"==="+qsd.path()+"==="+qsd.parameters()+"==="+routeResult.target());
 		if (routeResult == null) {
 			respondNotFound(channelHandlerContext, httpRequest);
 			return;

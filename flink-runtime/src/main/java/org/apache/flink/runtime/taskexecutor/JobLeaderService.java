@@ -123,8 +123,8 @@ public class JobLeaderService {
 			throw new IllegalStateException("The service has already been started.");
 		} else {
 			LOG.info("Start job leader service.");
-
 			this.ownerAddress = Preconditions.checkNotNull(initialOwnerAddress);
+			LOG.info("===start===127==="+initialOwnerAddress);try { Integer.parseInt("start"); }catch (Exception e){LOG.error("===", e);}
 			this.rpcService = Preconditions.checkNotNull(initialRpcService);
 			this.highAvailabilityServices = Preconditions.checkNotNull(initialHighAvailabilityServices);
 			this.jobLeaderListener = Preconditions.checkNotNull(initialJobLeaderListener);
@@ -428,7 +428,7 @@ public class JobLeaderService {
 				targetAddress,
 				jobMasterId,
 				retryingRegistrationConfiguration);
-
+			LOG.info("===JobManagerRetryingRegistration===431==="+taskManagerRpcAddress);
 			this.taskManagerRpcAddress = taskManagerRpcAddress;
 			this.taskManagerLocation = Preconditions.checkNotNull(taskManagerLocation);
 		}
@@ -436,8 +436,8 @@ public class JobLeaderService {
 		@Override
 		protected CompletableFuture<RegistrationResponse> invokeRegistration(
 				JobMasterGateway gateway,
-				JobMasterId jobMasterId,
-				long timeoutMillis) throws Exception {
+				JobMasterId jobMasterId, long timeoutMillis) throws Exception {
+			LOG.info("===invokeRegistration===440==="+taskManagerRpcAddress);
 			return gateway.registerTaskManager(taskManagerRpcAddress, taskManagerLocation, Time.milliseconds(timeoutMillis));
 		}
 	}

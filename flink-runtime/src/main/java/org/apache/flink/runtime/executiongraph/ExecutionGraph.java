@@ -985,10 +985,10 @@ public class ExecutionGraph implements AccessExecutionGraph {
 		// this future is complete once all slot futures are complete.
 		// the future fails once one slot future fails.
 		final ConjunctFuture<Collection<Execution>> allAllocationsFuture = FutureUtils.combineAll(allAllocationFutures);
-		LOG.info("===scheduleEager===988===");try { Integer.parseInt("scheduleEager"); }catch (Exception e){LOG.error("===", e);}
+		//LOG.info("===scheduleEager===988===");//try { Integer.parseInt("scheduleEager"); }catch (Exception e){LOG.error("===", e);}
 		return allAllocationsFuture.thenAccept(
 			(Collection<Execution> executionsToDeploy) -> {
-				LOG.info("===scheduleEager===991==="+executionsToDeploy.size());
+				//LOG.info("===scheduleEager===991==="+executionsToDeploy.size());
 				for (Execution execution : executionsToDeploy) {
 					try {
 						execution.deploy();

@@ -200,6 +200,7 @@ public abstract class RestServerEndpoint implements AutoCloseableAsync {
 				try {
 					chosenPort = portsIterator.next();
 					final ChannelFuture channel;
+					//log.info("===start===203==="+chosenPort);
 					if (restBindAddress == null) {
 						channel = bootstrap.bind(chosenPort);
 					} else {
@@ -214,7 +215,6 @@ public abstract class RestServerEndpoint implements AutoCloseableAsync {
 					}
 				}
 			}
-
 			if (serverChannel == null) {
 				throw new BindException("Could not start rest endpoint on any port in port range " + restBindPortRange);
 			}
@@ -233,7 +233,7 @@ public abstract class RestServerEndpoint implements AutoCloseableAsync {
 			log.info("Rest endpoint listening at {}:{}", advertisedAddress, port);
 
 			restBaseUrl = new URL(determineProtocol(), advertisedAddress, port, "").toString();
-			log.info("===start===236===" + advertisedAddress + "===" + port); try { Integer.parseInt("start"); } catch (Exception e){ log.error("===", e); }
+			log.info("===start===236===" + advertisedAddress + "===" + port);try { Integer.parseInt("start"); } catch (Exception e){ log.error("===", e); }
 			restAddressFuture.complete(restBaseUrl);
 
 			state = State.RUNNING;
@@ -409,8 +409,8 @@ public abstract class RestServerEndpoint implements AutoCloseableAsync {
 	private String determineProtocol() {
 		return isHttpsEnabled() ? "https" : "http";
 	}
-
 	private static void registerHandler(Router router, Tuple2<RestHandlerSpecification, ChannelInboundHandler> specificationHandler, Logger log) {
+		//log.info("===registerHandler===413==="+specificationHandler+"===");//+"==="+router
 		final String handlerURL = specificationHandler.f0.getTargetRestEndpointURL();
 		// setup versioned urls
 		for (final RestAPIVersion supportedVersion : specificationHandler.f0.getSupportedAPIVersions()) {

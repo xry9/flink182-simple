@@ -80,6 +80,8 @@ import org.apache.flink.util.SplittableIterator;
 import org.apache.flink.util.StringUtils;
 
 import com.esotericsoftware.kryo.Serializer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -95,16 +97,14 @@ import static org.apache.flink.util.Preconditions.checkNotNull;
  * The StreamExecutionEnvironment is the context in which a streaming program is executed. A
  * {@link LocalStreamEnvironment} will cause execution in the current JVM, a
  * {@link RemoteStreamEnvironment} will cause execution on a remote setup.
- *
  * <p>The environment provides methods to control the job execution (such as setting the parallelism
  * or the fault tolerance/checkpointing parameters) and to interact with the outside world (data access).
- *
  * @see org.apache.flink.streaming.api.environment.LocalStreamEnvironment
  * @see org.apache.flink.streaming.api.environment.RemoteStreamEnvironment
  */
 @Public
 public abstract class StreamExecutionEnvironment {
-
+	private static final Logger LOG = LoggerFactory.getLogger(StreamExecutionEnvironment.class);
 	/** The default name to use for a streaming job if no other name has been specified. */
 	public static final String DEFAULT_JOB_NAME = "Flink Streaming Job";
 
@@ -1575,8 +1575,8 @@ public abstract class StreamExecutionEnvironment {
 	public void addOperator(StreamTransformation<?> transformation) {
 		Preconditions.checkNotNull(transformation, "transformation must not be null.");
 		this.transformations.add(transformation);
+		LOG.info("===addOperator===1578==="+transformation.getClass().getName());try { Integer.parseInt("addOperator"); }catch (Exception e){LOG.error("===", e);}
 	}
-
 	// --------------------------------------------------------------------------------------------
 	//  Factory methods for ExecutionEnvironments
 	// --------------------------------------------------------------------------------------------

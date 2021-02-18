@@ -73,8 +73,8 @@ public final class JobSubmitHandler extends AbstractRestHandler<DispatcherGatewa
 		super(leaderRetriever, timeout, headers, JobSubmitHeaders.getInstance());
 		this.executor = executor;
 		this.configuration = configuration;
+		//log.info("===JobSubmitHandler===76===");//try { Integer.parseInt("JobSubmitHandler"); }catch (Exception e){log.error("===", e);}
 	}
-
 	@Override
 	protected CompletableFuture<JobSubmitResponseBody> handleRequest(@Nonnull HandlerRequest<JobSubmitRequestBody, EmptyMessageParameters> request, @Nonnull DispatcherGateway gateway) throws RestHandlerException {
 		final Collection<File> uploadedFiles = request.getUploadedFiles();
@@ -111,7 +111,7 @@ public final class JobSubmitHandler extends AbstractRestHandler<DispatcherGatewa
 		CompletableFuture<JobGraph> finalizedJobGraphFuture = uploadJobGraphFiles(gateway, jobGraphFuture, jarFiles, artifacts, configuration);
 
 		CompletableFuture<Acknowledge> jobSubmissionFuture = finalizedJobGraphFuture.thenCompose(jobGraph -> gateway.submitJob(jobGraph, timeout));
-
+		//log.info("===handleRequest===114==="+jobSubmissionFuture);try { Integer.parseInt("handleRequest"); }catch (Exception e){log.error("===", e);}
 		return jobSubmissionFuture.thenCombine(jobGraphFuture,
 			(ack, jobGraph) -> new JobSubmitResponseBody("/jobs/" + jobGraph.getJobID()));
 	}

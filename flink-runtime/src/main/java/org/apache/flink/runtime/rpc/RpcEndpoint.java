@@ -60,6 +60,7 @@ import static org.apache.flink.util.Preconditions.checkNotNull;
 public abstract class RpcEndpoint implements RpcGateway, AutoCloseableAsync {
 
 	protected final Logger log = LoggerFactory.getLogger(getClass());
+	public static final Logger LOG = LoggerFactory.getLogger(RpcEndpoint.class);
 
 	// ------------------------------------------------------------------------
 
@@ -90,7 +91,7 @@ public abstract class RpcEndpoint implements RpcGateway, AutoCloseableAsync {
 		this.endpointId = checkNotNull(endpointId, "endpointId");
 
 		this.rpcServer = rpcService.startServer(this);
-		log.info("===RpcEndpoint===93==="+endpointId+"==="+rpcService.getClass().getName()+"==="+rpcServer.getClass().getName());try { Integer.parseInt("RpcEndpoint"); }catch (Exception e){log.error("===", e);}
+		log.info("===RpcEndpoint===93==="+endpointId+"==="+rpcService.getClass().getName()+"==="+rpcServer.getClass().getName()+"==="+rpcServer.getAddress());//try { Integer.parseInt("RpcEndpoint"); }catch (Exception e){log.error("===", e);}
 		this.mainThreadExecutor = new MainThreadExecutor(rpcServer, this::validateRunsInMainThread);
 	}
 
@@ -342,8 +343,8 @@ public abstract class RpcEndpoint implements RpcGateway, AutoCloseableAsync {
 
 		public void runAsync(Runnable runnable) {
 			gateway.runAsync(runnable);
+			LOG.info("===runAsync===346==="+runnable);try { Integer.parseInt("runAsync"); }catch (Exception e){LOG.error("===", e);}
 		}
-
 		public void scheduleRunAsync(Runnable runnable, long delayMillis) {
 			gateway.scheduleRunAsync(runnable, delayMillis);
 		}
@@ -357,9 +358,9 @@ public abstract class RpcEndpoint implements RpcGateway, AutoCloseableAsync {
 			final long delayMillis = TimeUnit.MILLISECONDS.convert(delay, unit);
 			FutureTask<Void> ft = new FutureTask<>(command, null);
 			scheduleRunAsync(ft, delayMillis);
+			LOG.info("===schedule===361==="+command.getClass().getName());try { Integer.parseInt("schedule"); }catch (Exception e){LOG.error("===", e);}
 			return new ScheduledFutureAdapter<>(ft, delayMillis, TimeUnit.MILLISECONDS);
 		}
-
 		@Override
 		public <V> ScheduledFuture<V> schedule(Callable<V> callable, long delay, TimeUnit unit) {
 			throw new UnsupportedOperationException("Not implemented because the method is currently not required.");

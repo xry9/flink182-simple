@@ -128,12 +128,12 @@ public class StreamGraphGenerator {
 	 * This starts the actual transformation, beginning from the sinks.
 	 */
 	private StreamGraph generateInternal(List<StreamTransformation<?>> transformations) {
+		LOG.info("===generateInternal===131==="+transformations);
 		for (StreamTransformation<?> transformation: transformations) {
 			transform(transformation);
 		}
 		return streamGraph;
 	}
-
 	/**
 	 * Transforms one {@code StreamTransformation}.
 	 *
@@ -160,7 +160,7 @@ public class StreamGraphGenerator {
 
 		// call at least once to trigger exceptions about MissingTypeInfo
 		transform.getOutputType();
-
+		LOG.info("===transform===163==="+(transform instanceof OneInputTransformation<?, ?>)+"==="+(transform instanceof SinkTransformation<?>));
 		Collection<Integer> transformedIds;
 		if (transform instanceof OneInputTransformation<?, ?>) {
 			transformedIds = transformOneInputTransform((OneInputTransformation<?, ?>) transform);

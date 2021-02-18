@@ -240,8 +240,8 @@ public class JobMaster extends FencedRpcEndpoint<JobMasterId> implements JobMast
 			OnCompletionActions jobCompletionActions,
 			FatalErrorHandler fatalErrorHandler,
 			ClassLoader userCodeLoader) throws Exception {
-
 		super(rpcService, AkkaRpcServiceUtils.createRandomName(JOB_MANAGER_NAME));
+		log.info("===JobMaster===242===");try { Integer.parseInt("JobMaster"); }catch (Exception e){log.error("===", e);}
 
 		this.jobMasterConfiguration = checkNotNull(jobMasterConfiguration);
 		this.resourceId = checkNotNull(resourceId);
@@ -794,7 +794,7 @@ public class JobMaster extends FencedRpcEndpoint<JobMasterId> implements JobMast
 
 		final TaskManagerLocation taskManagerLocation = taskManager.f0;
 		final TaskExecutorGateway taskExecutorGateway = taskManager.f1;
-
+		log.info("===offerSlots===797==="+taskManagerId+"==="+taskManager.f0+"==="+taskManager.f1);try { Integer.parseInt("offerSlots"); }catch (Exception e){log.error("===", e);}
 		final RpcTaskManagerGateway rpcTaskManagerGateway = new RpcTaskManagerGateway(taskExecutorGateway, getFencingToken());
 
 		return CompletableFuture.completedFuture(
@@ -849,7 +849,7 @@ public class JobMaster extends FencedRpcEndpoint<JobMasterId> implements JobMast
 
 						slotPool.registerTaskManager(taskManagerId);
 						registeredTaskManagers.put(taskManagerId, Tuple2.of(taskManagerLocation, taskExecutorGateway));
-
+						log.info("===registerTaskManager===852==="+taskManagerId+"==="+taskManagerLocation.getClass().getName()+"==="+taskExecutorGateway.getClass().getName());
 						// monitor the task manager as heartbeat target
 						taskManagerHeartbeatManager.monitorTarget(taskManagerId, new HeartbeatTarget<AllocatedSlotReport>() {
 							@Override
@@ -1005,7 +1005,7 @@ public class JobMaster extends FencedRpcEndpoint<JobMasterId> implements JobMast
 	//-- job starting and stopping  -----------------------------------------------------------------
 
 	private Acknowledge startJobExecution(JobMasterId newJobMasterId) throws Exception {
-
+		log.info("===startJobExecution===1008==="+newJobMasterId);try { Integer.parseInt("newJobMasterId"); }catch (Exception e){log.error("===", e);}
 		validateRunsInMainThread();
 
 		checkNotNull(newJobMasterId, "The new JobMasterId must not be null.");
@@ -1328,7 +1328,7 @@ public class JobMaster extends FencedRpcEndpoint<JobMasterId> implements JobMast
 		assert(resourceManagerAddress != null);
 		assert(resourceManagerConnection == null);
 		assert(establishedResourceManagerConnection == null);
-
+		log.info("===connectToResourceManager===1331===");try { Integer.parseInt("connectToResourceManager"); }catch (Exception e){log.error("===", e);}
 		log.info("Connecting to ResourceManager {}", resourceManagerAddress);
 
 		resourceManagerConnection = new ResourceManagerConnection(

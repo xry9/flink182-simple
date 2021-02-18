@@ -107,7 +107,7 @@ class AkkaRpcActor<T extends RpcEndpoint & RpcGateway> extends UntypedActor {
 			final CompletableFuture<Boolean> terminationFuture,
 			final int version,
 			final long maximumFramesize) {
-		log.info("===AkkaRpcActor===110===");//try { Integer.parseInt("AkkaRpcActor"); }catch (Exception e){log.error("===", e);}
+		log.info("===AkkaRpcActor===110==="+rpcEndpoint.getClass().getName());try { Integer.parseInt("AkkaRpcActor"); }catch (Exception e){log.error("===", e);}
 		checkArgument(maximumFramesize > 0, "Maximum framesize must be positive.");
 		this.rpcEndpoint = checkNotNull(rpcEndpoint, "rpc endpoint");
 		this.mainThreadValidator = new MainThreadValidatorUtil(rpcEndpoint);
@@ -136,13 +136,13 @@ class AkkaRpcActor<T extends RpcEndpoint & RpcGateway> extends UntypedActor {
 
 	@Override
 	public void onReceive(final Object message) {
+		log.info("===onReceive===139==="+this.rpcEndpoint.getAddress()+"==="+(message instanceof RemoteHandshakeMessage)+"==="+(message instanceof ControlMessages)+"==="+(state.isRunning())+"==="+this.getClass().getSimpleName()+"==="+message.getClass().getName());
 		if (message instanceof RemoteHandshakeMessage) {
 			handleHandshakeMessage((RemoteHandshakeMessage) message);
 		} else if (message instanceof ControlMessages) {
 			handleControlMessage(((ControlMessages) message));
 		} else if (state.isRunning()) {
 			mainThreadValidator.enterMainThread();
-			log.info("===onReceive===145==="+this.getClass().getName()+"==="+message.getClass().getName());
 			try {
 				handleRpcMessage(message);
 			} finally {
@@ -153,8 +153,8 @@ class AkkaRpcActor<T extends RpcEndpoint & RpcGateway> extends UntypedActor {
 
 			log.info("The rpc endpoint {} has not been started yet. Discarding message {} until processing is started.", rpcEndpoint.getClass().getName(), message.getClass().getName());
 
-			sendErrorIfSender(new AkkaRpcException(
-				String.format("Discard message, because the rpc endpoint %s has not been started yet.", rpcEndpoint.getAddress())));
+			sendErrorIfSender(new AkkaRpcException(String.format("Discard message, because the rpc endpoint %s has not been started yet.", rpcEndpoint.getAddress())));
+
 		}
 	}
 
@@ -179,8 +179,8 @@ class AkkaRpcActor<T extends RpcEndpoint & RpcGateway> extends UntypedActor {
 		log.warn(message);
 		sendErrorIfSender(new AkkaUnknownMessageException(message));
 	}
-
 	protected void handleRpcMessage(Object message) {
+		log.info("===handleRpcMessage===183==="+(message instanceof RunAsync)+"==="+(message instanceof CallAsync)+"==="+(message instanceof RpcInvocation));
 		if (message instanceof RunAsync) {
 			handleRunAsync((RunAsync) message);
 		} else if (message instanceof CallAsync) {
@@ -258,7 +258,7 @@ class AkkaRpcActor<T extends RpcEndpoint & RpcGateway> extends UntypedActor {
 			RpcConnectionException rpcException = new RpcConnectionException("Could not find rpc method for rpc invocation.", e);
 			getSender().tell(new Status.Failure(rpcException), getSelf());
 		}
-
+		log.info("===handleRpcInvocation===261==="+(rpcMethod != null? rpcMethod.getName():"null")+"==="+rpcEndpoint.getClass().getName()+"==="+rpcEndpoint.getAddress());
 		if (rpcMethod != null) {
 			try {
 				// this supports declaration of anonymous classes
@@ -267,13 +267,13 @@ class AkkaRpcActor<T extends RpcEndpoint & RpcGateway> extends UntypedActor {
 				if (rpcMethod.getReturnType().equals(Void.TYPE)) {
 					// No return value to send back
 					rpcMethod.invoke(rpcEndpoint, rpcInvocation.getArgs());
-				}
-				else {
+				} else {
+
 					final Object result;
 					try {
 						result = rpcMethod.invoke(rpcEndpoint, rpcInvocation.getArgs());
-					}
-					catch (InvocationTargetException e) {
+						log.info("===handleRpcInvocation===275==="+rpcMethod.getName()+"==="+rpcEndpoint.getClass().getName()); //try { Integer.parseInt("handleRpcInvocation"); }catch (Exception e){log.error("===", e);}
+					} catch (InvocationTargetException e) {
 						log.trace("Reporting back error thrown in remote procedure {}", rpcMethod, e);
 
 						// tell the sender about the failure
@@ -385,7 +385,7 @@ class AkkaRpcActor<T extends RpcEndpoint & RpcGateway> extends UntypedActor {
 	private void handleRunAsync(RunAsync runAsync) {
 		final long timeToRun = runAsync.getTimeNanos();
 		final long delayNanos;
-
+		log.info("===handleRunAsync===388==="+(timeToRun == 0 || (timeToRun - System.nanoTime()) <= 0)+"==="+runAsync.getRunnable().getClass().getName());
 		if (timeToRun == 0 || (delayNanos = timeToRun - System.nanoTime()) <= 0) {
 			// run immediately
 			try {
