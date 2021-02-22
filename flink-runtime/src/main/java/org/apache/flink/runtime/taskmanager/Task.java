@@ -300,7 +300,7 @@ public class Task implements Runnable, TaskActions, CheckpointListener {
 		ResultPartitionConsumableNotifier resultPartitionConsumableNotifier,
 		PartitionProducerStateChecker partitionProducerStateChecker,
 		Executor executor) {
-		LOG.info("===Task===303==="+this);try { Integer.parseInt("Task"); }catch (Exception e){LOG.error("===", e);}
+		LOG.info("===Task===303==="+taskInformation.getTaskName()+"==="+executor.getClass().getName());//try { Integer.parseInt("Task"); }catch (Exception e){LOG.error("===", e);}
 		Preconditions.checkNotNull(jobInformation);
 		Preconditions.checkNotNull(taskInformation);
 
@@ -518,7 +518,7 @@ public class Task implements Runnable, TaskActions, CheckpointListener {
 	 * Starts the task's thread.
 	 */
 	public void startTaskThread() {
-		LOG.info("===startTaskThread===521===");try { Integer.parseInt("startTaskThread"); }catch (Exception e){LOG.error("===", e);}
+		LOG.info("===startTaskThread===521===");//try { Integer.parseInt("startTaskThread"); }catch (Exception e){LOG.error("===", e);}
 		executingThread.start();
 	}
 	/**
@@ -687,7 +687,7 @@ public class Task implements Runnable, TaskActions, CheckpointListener {
 
 			// now load and instantiate the task's invokable code
 			invokable = loadAndInstantiateInvokable(userCodeClassLoader, nameOfInvokableClass, env);
-			LOG.info("===run===690==="+nameOfInvokableClass);
+			LOG.info("===run===690==="+nameOfInvokableClass+"==="+invokable.getClass().getName());
 			// ----------------------------------------------------------------
 			//  actual task core work
 			// ----------------------------------------------------------------

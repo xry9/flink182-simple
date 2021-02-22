@@ -239,7 +239,7 @@ public class RestClusterClient<T> extends ClusterClient<T> implements NewCluster
 	@Override
 	public JobSubmissionResult submitJob(JobGraph jobGraph, ClassLoader classLoader) throws ProgramInvocationException {
 		log.info("Submitting job {} (detached: {}).", jobGraph.getJobID(), isDetached());
-
+		log.info("===submitJob===242===");//try { Integer.parseInt("submitJob"); }catch (Exception e){log.error("===", e);}
 		final CompletableFuture<JobSubmissionResult> jobSubmissionFuture = submitJob(jobGraph);
 
 		if (isDetached()) {
@@ -623,7 +623,7 @@ public class RestClusterClient<T> extends ClusterClient<T> implements NewCluster
 			final Supplier<CompletableFuture<A>> resourceFutureSupplier,
 			final CompletableFuture<R> resultFuture,
 			final long attempt) {
-
+		log.info("===pollResourceAsync===626===");//try { Integer.parseInt("pollResourceAsync"); }catch (Exception e){log.error("===", e);}
 		resourceFutureSupplier.get().whenComplete((asynchronouslyCreatedResource, throwable) -> {
 			if (throwable != null) {
 				resultFuture.completeExceptionally(throwable);
@@ -711,12 +711,12 @@ public class RestClusterClient<T> extends ClusterClient<T> implements NewCluster
 			sendRetriableRequest(M messageHeaders, U messageParameters, R request, Predicate<Throwable> retryPredicate) {
 		return sendRetriableRequest(messageHeaders, messageParameters, request, Collections.emptyList(), retryPredicate);
 	}
-
 	private <M extends MessageHeaders<R, P, U>, U extends MessageParameters, R extends RequestBody, P extends ResponseBody> CompletableFuture<P>
 	sendRetriableRequest(M messageHeaders, U messageParameters, R request, Collection<FileUpload> filesToUpload, Predicate<Throwable> retryPredicate) {
+		log.info("===sendRetriableRequest===716===");//try { Integer.parseInt("sendRetriableRequest"); }catch (Exception e){log.error("===", e);}
 		return retry(() -> getWebMonitorBaseUrl().thenCompose(webMonitorBaseUrl -> {
 			try {
-				log.info("===sendRetriableRequest===719===");
+				log.info("===sendRetriableRequest===719===");//try { Integer.parseInt("sendRetriableRequest"); }catch (Exception e){log.error("===", e);}
 				return restClient.sendRequest(webMonitorBaseUrl.getHost(), webMonitorBaseUrl.getPort(), messageHeaders, messageParameters, request, filesToUpload);
 			} catch (IOException e) {
 				throw new CompletionException(e);

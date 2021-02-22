@@ -173,7 +173,7 @@ public class AkkaRpcServiceUtils {
 		}
 
 		final String hostPort = NetUtils.unresolvedHostAndPortToNormalizedString(hostname, port);
-		LOG.info("===getRpcUrl===176==="+protocolPrefix+"==="+hostPort+"==="+endpointName);try { Integer.parseInt("endpointName"); }catch (Exception e){LOG.error("===", e);}
+		LOG.info("===getRpcUrl===176==="+protocolPrefix+"==="+hostPort+"==="+endpointName);//try { Integer.parseInt("endpointName"); }catch (Exception e){LOG.error("===", e);}
 		return String.format("%s://flink@%s/user/%s", protocolPrefix, hostPort, endpointName);
 	}
 

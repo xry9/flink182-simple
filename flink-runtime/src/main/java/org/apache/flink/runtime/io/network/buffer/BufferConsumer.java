@@ -20,9 +20,9 @@ package org.apache.flink.runtime.io.network.buffer;
 
 import org.apache.flink.core.memory.MemorySegment;
 import org.apache.flink.runtime.io.network.buffer.BufferBuilder.PositionMarker;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import javax.annotation.concurrent.NotThreadSafe;
-
 import java.io.Closeable;
 
 import static org.apache.flink.util.Preconditions.checkNotNull;
@@ -38,8 +38,8 @@ import static org.apache.flink.util.Preconditions.checkState;
  */
 @NotThreadSafe
 public class BufferConsumer implements Closeable {
+	private static final Logger LOG = LoggerFactory.getLogger(BufferConsumer.class);
 	private final Buffer buffer;
-
 	private final CachedPositionMarker writerPosition;
 
 	private int currentReaderPosition;
@@ -69,11 +69,11 @@ public class BufferConsumer implements Closeable {
 	}
 
 	private BufferConsumer(Buffer buffer, BufferBuilder.PositionMarker currentWriterPosition, int currentReaderPosition) {
+		LOG.info("===BufferConsumer===72==="+buffer.getClass().getName());
 		this.buffer = checkNotNull(buffer);
 		this.writerPosition = new CachedPositionMarker(checkNotNull(currentWriterPosition));
 		this.currentReaderPosition = currentReaderPosition;
 	}
-
 	/**
 	 * Checks whether the {@link BufferBuilder} has already been finished.
 	 *
@@ -95,9 +95,9 @@ public class BufferConsumer implements Closeable {
 		int cachedWriterPosition = writerPosition.getCached();
 		Buffer slice = buffer.readOnlySlice(currentReaderPosition, cachedWriterPosition - currentReaderPosition);
 		currentReaderPosition = cachedWriterPosition;
+		//LOG.info("===build===98==="+buffer.getClass().getName()+"==="+(slice.retainBuffer()==null));
 		return slice.retainBuffer();
 	}
-
 	/**
 	 * Returns a retained copy with separate indexes. This allows to read from the same {@link MemorySegment} twice.
 	 *

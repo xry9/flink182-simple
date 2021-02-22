@@ -700,8 +700,8 @@ public abstract class AbstractStreamOperator<OUT>
 		public CountingOutput(Output<StreamRecord<OUT>> output, Counter counter) {
 			this.output = output;
 			this.numRecordsOut = counter;
+			LOG.info("===CountingOutput===703==="+output.getClass().getName());
 		}
-
 		@Override
 		public void emitWatermark(Watermark mark) {
 			output.emitWatermark(mark);

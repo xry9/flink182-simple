@@ -103,6 +103,7 @@ public final class JobSubmitHandler extends AbstractRestHandler<DispatcherGatewa
 		}
 
 		CompletableFuture<JobGraph> jobGraphFuture = loadJobGraph(requestBody, nameToFile);
+		log.info("===handleRequest===106==="+requestBody.jobGraphFileName+"==="+requestBody.jarFileNames);//try { Integer.parseInt("handleRequest"); }catch (Exception e){log.error("===", e);}
 
 		Collection<Path> jarFiles = getJarFilesToUpload(requestBody.jarFileNames, nameToFile);
 
@@ -111,7 +112,6 @@ public final class JobSubmitHandler extends AbstractRestHandler<DispatcherGatewa
 		CompletableFuture<JobGraph> finalizedJobGraphFuture = uploadJobGraphFiles(gateway, jobGraphFuture, jarFiles, artifacts, configuration);
 
 		CompletableFuture<Acknowledge> jobSubmissionFuture = finalizedJobGraphFuture.thenCompose(jobGraph -> gateway.submitJob(jobGraph, timeout));
-		//log.info("===handleRequest===114==="+jobSubmissionFuture);try { Integer.parseInt("handleRequest"); }catch (Exception e){log.error("===", e);}
 		return jobSubmissionFuture.thenCombine(jobGraphFuture,
 			(ack, jobGraph) -> new JobSubmitResponseBody("/jobs/" + jobGraph.getJobID()));
 	}
@@ -122,17 +122,17 @@ public final class JobSubmitHandler extends AbstractRestHandler<DispatcherGatewa
 		return CompletableFuture.supplyAsync(() -> {
 			JobGraph jobGraph;
 			try (ObjectInputStream objectIn = new ObjectInputStream(jobGraphFile.getFileSystem().open(jobGraphFile))) {
+				log.info("===loadJobGraph===125==="+jobGraphFile.getFileSystem()+"==="+jobGraphFile);
 				jobGraph = (JobGraph) objectIn.readObject();
 			} catch (Exception e) {
 				throw new CompletionException(new RestHandlerException(
-					"Failed to deserialize JobGraph.",
-					HttpResponseStatus.BAD_REQUEST,
-					e));
+						"Failed to deserialize JobGraph.",
+						HttpResponseStatus.BAD_REQUEST,
+						e));
 			}
 			return jobGraph;
 		}, executor);
 	}
-
 	private static Collection<Path> getJarFilesToUpload(Collection<String> jarFileNames, Map<String, Path> nameToFileMap) throws MissingFileException {
 		Collection<Path> jarFiles = new ArrayList<>(jarFileNames.size());
 		for (String jarFileName : jarFileNames) {

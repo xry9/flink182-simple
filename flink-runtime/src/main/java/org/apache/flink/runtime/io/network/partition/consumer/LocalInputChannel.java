@@ -184,7 +184,7 @@ public class LocalInputChannel extends InputChannel implements BufferAvailabilit
 		}
 
 		BufferAndBacklog next = subpartitionView.getNextBuffer();
-
+		//LOG.info("===getNextBuffer===187==="+(next == null)+"==="+subpartitionView.getClass().getName());
 		if (next == null) {
 			if (subpartitionView.isReleased()) {
 				throw new CancelTaskException("Consumed partition " + subpartitionView + " has been released.");

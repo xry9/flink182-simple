@@ -23,16 +23,16 @@ import org.apache.flink.api.common.state.ValueState;
 import org.apache.flink.api.common.state.ValueStateDescriptor;
 import org.apache.flink.api.common.typeutils.TypeSerializer;
 import org.apache.flink.streaming.runtime.streamrecord.StreamRecord;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * A {@link StreamOperator} for executing a {@link ReduceFunction} on a
  * {@link org.apache.flink.streaming.api.datastream.KeyedStream}.
  */
-
 @Internal
-public class StreamGroupedReduce<IN> extends AbstractUdfStreamOperator<IN, ReduceFunction<IN>>
-		implements OneInputStreamOperator<IN, IN> {
-
+public class StreamGroupedReduce<IN> extends AbstractUdfStreamOperator<IN, ReduceFunction<IN>> implements OneInputStreamOperator<IN, IN> {
+	private static final Logger LOG = LoggerFactory.getLogger(StreamGroupedReduce.class);
 	private static final long serialVersionUID = 1L;
 
 	private static final String STATE_NAME = "_op_state";
@@ -57,7 +57,7 @@ public class StreamGroupedReduce<IN> extends AbstractUdfStreamOperator<IN, Reduc
 	public void processElement(StreamRecord<IN> element) throws Exception {
 		IN value = element.getValue();
 		IN currentValue = values.value();
-
+		LOG.info("===processElement===60==="+value+"==="+currentValue);
 		if (currentValue != null) {
 			IN reduced = userFunction.reduce(currentValue, value);
 			values.update(reduced);

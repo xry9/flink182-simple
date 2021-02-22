@@ -107,7 +107,7 @@ class AkkaRpcActor<T extends RpcEndpoint & RpcGateway> extends UntypedActor {
 			final CompletableFuture<Boolean> terminationFuture,
 			final int version,
 			final long maximumFramesize) {
-		log.info("===AkkaRpcActor===110==="+rpcEndpoint.getClass().getName());try { Integer.parseInt("AkkaRpcActor"); }catch (Exception e){log.error("===", e);}
+		log.info("===AkkaRpcActor===110==="+rpcEndpoint.getClass().getName());//try { Integer.parseInt("AkkaRpcActor"); }catch (Exception e){log.error("===", e);}
 		checkArgument(maximumFramesize > 0, "Maximum framesize must be positive.");
 		this.rpcEndpoint = checkNotNull(rpcEndpoint, "rpc endpoint");
 		this.mainThreadValidator = new MainThreadValidatorUtil(rpcEndpoint);
@@ -258,7 +258,7 @@ class AkkaRpcActor<T extends RpcEndpoint & RpcGateway> extends UntypedActor {
 			RpcConnectionException rpcException = new RpcConnectionException("Could not find rpc method for rpc invocation.", e);
 			getSender().tell(new Status.Failure(rpcException), getSelf());
 		}
-		log.info("===handleRpcInvocation===261==="+(rpcMethod != null? rpcMethod.getName():"null")+"==="+rpcEndpoint.getClass().getName()+"==="+rpcEndpoint.getAddress());
+		log.info("===handleRpcInvocation===261==="+rpcEndpoint.getAddress()+"==="+(rpcMethod != null? rpcMethod.getName():"null")+"==="+rpcEndpoint.getClass().getName());
 		if (rpcMethod != null) {
 			try {
 				// this supports declaration of anonymous classes
@@ -385,7 +385,7 @@ class AkkaRpcActor<T extends RpcEndpoint & RpcGateway> extends UntypedActor {
 	private void handleRunAsync(RunAsync runAsync) {
 		final long timeToRun = runAsync.getTimeNanos();
 		final long delayNanos;
-		log.info("===handleRunAsync===388==="+(timeToRun == 0 || (timeToRun - System.nanoTime()) <= 0)+"==="+runAsync.getRunnable().getClass().getName());
+		log.info("===handleRunAsync===388==="+(timeToRun == 0 || (timeToRun - System.nanoTime()) <= 0)+"==="+runAsync.getRunnable().getClass().getName()+"==="+runAsync.getRunnable());
 		if (timeToRun == 0 || (delayNanos = timeToRun - System.nanoTime()) <= 0) {
 			// run immediately
 			try {

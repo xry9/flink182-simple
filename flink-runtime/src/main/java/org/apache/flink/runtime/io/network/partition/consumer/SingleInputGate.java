@@ -542,8 +542,8 @@ public class SingleInputGate implements InputGate {
 						return Optional.empty();
 					}
 				}
-
 				currentChannel = inputChannelsWithData.remove();
+//				LOG.info("===getNextBufferOrEvent===546==="+currentChannel.getClass().getName());
 				enqueuedInputChannelsWithData.clear(currentChannel.getChannelIndex());
 				moreAvailable = !inputChannelsWithData.isEmpty();
 			}
@@ -558,8 +558,8 @@ public class SingleInputGate implements InputGate {
 			queueChannel(currentChannel);
 			moreAvailable = true;
 		}
-
 		final Buffer buffer = result.get().buffer();
+		LOG.info("===getNextBufferOrEvent===562==="+(buffer.isBuffer()));
 		if (buffer.isBuffer()) {
 			return Optional.of(new BufferOrEvent(buffer, currentChannel.getChannelIndex(), moreAvailable));
 		}

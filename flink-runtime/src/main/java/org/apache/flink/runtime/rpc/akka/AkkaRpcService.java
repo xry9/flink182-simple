@@ -105,7 +105,7 @@ public class AkkaRpcService implements RpcService {
 	private volatile boolean stopped;
 
 	public AkkaRpcService(final ActorSystem actorSystem, final AkkaRpcServiceConfiguration configuration) {
-		LOG.info("===AkkaRpcService===108==="+actorSystem);try { Integer.parseInt("actorSystem"); }catch (Exception e){LOG.error("===", e);}
+		LOG.info("===AkkaRpcService===108==="+actorSystem);//try { Integer.parseInt("actorSystem"); }catch (Exception e){LOG.error("===", e);}
 		this.actorSystem = checkNotNull(actorSystem, "actor system");
 		this.configuration = checkNotNull(configuration, "akka rpc service configuration");
 		Address actorSystemAddress = AkkaUtils.getAddress(actorSystem);
@@ -195,7 +195,7 @@ public class AkkaRpcService implements RpcService {
 
 		CompletableFuture<Void> terminationFuture = new CompletableFuture<>();
 		final Props akkaRpcActorProps;
-		LOG.info("===startServer===198==="+rpcEndpoint.getClass().getName()+"==="+(rpcEndpoint instanceof FencedRpcEndpoint));try { Integer.parseInt("startServer"); }catch (Exception e){LOG.error("===", e);}
+		LOG.info("===startServer===198==="+rpcEndpoint.getClass().getName()+"==="+(rpcEndpoint instanceof FencedRpcEndpoint));//try { Integer.parseInt("startServer"); }catch (Exception e){LOG.error("===", e);}
 		if (rpcEndpoint instanceof FencedRpcEndpoint) {
 			akkaRpcActorProps = Props.create(
 				FencedAkkaRpcActor.class,
@@ -442,7 +442,7 @@ public class AkkaRpcService implements RpcService {
 		final Future<ActorIdentity> identify = Patterns
 			.ask(actorSel, new Identify(42), configuration.getTimeout().toMilliseconds())
 			.<ActorIdentity>mapTo(ClassTag$.MODULE$.<ActorIdentity>apply(ActorIdentity.class));
-		LOG.info("===connectInternal===446==="+address+"==="+actorSel.getClass().getName()+"==="+identify.getClass().getName());try { Integer.parseInt("connectInternal"); }catch (Exception e){LOG.error("===", e);}
+		LOG.info("===connectInternal===446==="+address+"==="+actorSel.getClass().getName()+"==="+identify.getClass().getName());//try { Integer.parseInt("connectInternal"); }catch (Exception e){LOG.error("===", e);}
 		final CompletableFuture<ActorIdentity> identifyFuture = FutureUtils.toJava(identify);
 
 		final CompletableFuture<ActorRef> actorRefFuture = identifyFuture.thenApply(

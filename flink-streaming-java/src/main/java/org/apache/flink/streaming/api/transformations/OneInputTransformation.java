@@ -17,7 +17,6 @@
  */
 
 package org.apache.flink.streaming.api.transformations;
-
 import org.apache.flink.annotation.Internal;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
 import org.apache.flink.api.java.functions.KeySelector;
@@ -25,10 +24,11 @@ import org.apache.flink.streaming.api.operators.ChainingStrategy;
 import org.apache.flink.streaming.api.operators.OneInputStreamOperator;
 
 import org.apache.flink.shaded.guava18.com.google.common.collect.Lists;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Collection;
 import java.util.List;
-
 /**
  * This Transformation represents the application of a
  * {@link org.apache.flink.streaming.api.operators.OneInputStreamOperator} to one input
@@ -39,7 +39,7 @@ import java.util.List;
  */
 @Internal
 public class OneInputTransformation<IN, OUT> extends StreamTransformation<OUT> {
-
+	private static final Logger LOG = LoggerFactory.getLogger(OneInputTransformation.class);
 	private final StreamTransformation<IN> input;
 
 	private final OneInputStreamOperator<IN, OUT> operator;
@@ -66,8 +66,8 @@ public class OneInputTransformation<IN, OUT> extends StreamTransformation<OUT> {
 		super(name, outputType, parallelism);
 		this.input = input;
 		this.operator = operator;
+		LOG.info("===OneInputTransformation===69==="+input.getClass().getName()+"==="+operator.getClass().getName());//try { Integer.parseInt("OneInputTransformation"); }catch (Exception e){LOG.error("===", e);}
 	}
-
 	/**
 	 * Returns the input {@code StreamTransformation} of this {@code OneInputTransformation}.
 	 */

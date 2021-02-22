@@ -233,7 +233,7 @@ public abstract class RestServerEndpoint implements AutoCloseableAsync {
 			log.info("Rest endpoint listening at {}:{}", advertisedAddress, port);
 
 			restBaseUrl = new URL(determineProtocol(), advertisedAddress, port, "").toString();
-			log.info("===start===236===" + advertisedAddress + "===" + port);try { Integer.parseInt("start"); } catch (Exception e){ log.error("===", e); }
+			log.info("===start===236===" + advertisedAddress + "===" + port);//try { Integer.parseInt("start"); } catch (Exception e){ log.error("===", e); }
 			restAddressFuture.complete(restBaseUrl);
 
 			state = State.RUNNING;

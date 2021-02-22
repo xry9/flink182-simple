@@ -17,8 +17,9 @@
  */
 
 package org.apache.flink.core.memory;
-
 import org.apache.flink.annotation.Internal;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.DataInput;
 import java.io.DataOutput;
@@ -26,7 +27,6 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.ReadOnlyBufferException;
-
 /**
  * This class represents a piece of memory managed by Flink.
  * The segment may be backed by heap memory (byte array) or by off-heap memory.
@@ -95,7 +95,7 @@ import java.nio.ReadOnlyBufferException;
  */
 @Internal
 public abstract class MemorySegment {
-
+	private static final Logger LOG = LoggerFactory.getLogger(MemorySegment.class);
 	/**
 	 * The unsafe handle for transparent memory copied (heap / off-heap).
 	 */
@@ -184,7 +184,7 @@ public abstract class MemorySegment {
 			throw new IllegalArgumentException("Segment initialized with too large address: " + offHeapAddress
 					+ " ; Max allowed address is " + (Long.MAX_VALUE - Integer.MAX_VALUE - 1));
 		}
-
+		//LOG.info("===MemorySegment===187===");try { Integer.parseInt("offHeapAddress"); }catch (Exception e){LOG.error("===", e);}
 		this.heapMemory = null;
 		this.address = offHeapAddress;
 		this.addressLimit = this.address + size;

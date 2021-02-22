@@ -96,8 +96,8 @@ public class BarrierTracker implements CheckpointBarrierHandler {
 				// buffer or input exhausted
 				return null;
 			}
-
 			BufferOrEvent bufferOrEvent = next.get();
+			LOG.info("===getNextNonBlocked===100==="+(bufferOrEvent.isBuffer()));//+"==="+(bufferOrEvent.getEvent().getClass() == CheckpointBarrier.class)+"==="+(bufferOrEvent.getEvent().getClass() == CancelCheckpointMarker.class)
 			if (bufferOrEvent.isBuffer()) {
 				return bufferOrEvent;
 			}

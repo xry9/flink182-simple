@@ -124,14 +124,14 @@ public abstract class AbstractHandler<T extends RestfulGateway, R extends Reques
 				try {
 					ByteBufInputStream in = new ByteBufInputStream(msgContent);
 					request = MAPPER.readValue(in, untypedResponseMessageHeaders.getRequestClass());
+					log.info("===respondAsLeader===127==="+untypedResponseMessageHeaders.getRequestClass().getName());
 				} catch (JsonParseException | JsonMappingException je) {
 					throw new RestHandlerException(
-						String.format("Request did not match expected format %s.", untypedResponseMessageHeaders.getRequestClass().getSimpleName()),
-						HttpResponseStatus.BAD_REQUEST,
-						je);
+							String.format("Request did not match expected format %s.", untypedResponseMessageHeaders.getRequestClass().getSimpleName()),
+							HttpResponseStatus.BAD_REQUEST,
+							je);
 				}
 			}
-
 			final HandlerRequest<R, M> handlerRequest;
 
 			try {

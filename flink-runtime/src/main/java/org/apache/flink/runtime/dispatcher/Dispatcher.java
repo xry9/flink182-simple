@@ -470,7 +470,7 @@ public abstract class Dispatcher extends FencedRpcEndpoint<DispatcherId> impleme
 	public CompletableFuture<MultipleJobsDetails> requestMultipleJobDetails(Time timeout) {
 		List<CompletableFuture<Optional<JobDetails>>> individualOptionalJobDetails = queryJobMastersForInformation(
 			(JobMasterGateway jobMasterGateway) -> jobMasterGateway.requestJobDetails(timeout));
-
+		LOG.info("===requestMultipleJobDetails===473===");
 		CompletableFuture<Collection<Optional<JobDetails>>> optionalCombinedJobDetails = FutureUtils.combineAll(
 			individualOptionalJobDetails);
 
@@ -522,7 +522,7 @@ public abstract class Dispatcher extends FencedRpcEndpoint<DispatcherId> impleme
 	@Override
 	public CompletableFuture<ArchivedExecutionGraph> requestJob(JobID jobId, Time timeout) {
 		final CompletableFuture<JobMasterGateway> jobMasterGatewayFuture = getJobMasterGatewayFuture(jobId);
-
+		LOG.info("===requestJob===525===");try { Integer.parseInt("requestJob"); }catch (Exception e){LOG.error("===", e);}
 		final CompletableFuture<ArchivedExecutionGraph> archivedExecutionGraphFuture = jobMasterGatewayFuture.thenCompose(
 			(JobMasterGateway jobMasterGateway) -> jobMasterGateway.requestJob(timeout));
 

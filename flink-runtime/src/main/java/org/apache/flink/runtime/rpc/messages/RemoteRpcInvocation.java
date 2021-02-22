@@ -51,7 +51,7 @@ public class RemoteRpcInvocation implements RpcInvocation, Serializable {
 		final String methodName,
 		final Class<?>[] parameterTypes,
 		final Object[] args) throws IOException {
-		log.info("===RemoteRpcInvocation===52==="+methodName+"==="+ Arrays.toString(args));try { Integer.parseInt("RemoteRpcInvocation"); }catch (Exception e){log.error("===", e);}
+		log.info("===RemoteRpcInvocation===52==="+methodName+"==="+ Arrays.toString(args));//try { Integer.parseInt("RemoteRpcInvocation"); }catch (Exception e){log.error("===", e);}
 		serializedMethodInvocation = new SerializedValue<>(new RemoteRpcInvocation.MethodInvocation(methodName, parameterTypes, args));
 		methodInvocation = null;
 	}
@@ -116,7 +116,7 @@ public class RemoteRpcInvocation implements RpcInvocation, Serializable {
 	}
 
 	private void deserializeMethodInvocation() throws IOException, ClassNotFoundException {
-		log.info("===RemoteRpcInvocation===119===");try { Integer.parseInt("RemoteRpcInvocation"); }catch (Exception e){log.error("===", e);}
+		log.info("===RemoteRpcInvocation===119===");//try { Integer.parseInt("RemoteRpcInvocation"); }catch (Exception e){log.error("===", e);}
 		if (methodInvocation == null) {
 			methodInvocation = serializedMethodInvocation.deserializeValue(ClassLoader.getSystemClassLoader());
 		}
@@ -127,13 +127,13 @@ public class RemoteRpcInvocation implements RpcInvocation, Serializable {
 	private void writeObject(ObjectOutputStream oos) throws IOException {
 		oos.writeObject(serializedMethodInvocation);
 		String method = ""; try { method = getMethodName(); } catch (ClassNotFoundException e) { log.error("===", e); }
-		log.info("===RemoteRpcInvocation===128==="+method);try { Integer.parseInt("RemoteRpcInvocation"); }catch (Exception e){log.error("===", e);}
+		log.info("===RemoteRpcInvocation===128==="+method);//try { Integer.parseInt("RemoteRpcInvocation"); }catch (Exception e){log.error("===", e);}
 	}
 	@SuppressWarnings("unchecked")
 	private void readObject(ObjectInputStream ois) throws IOException, ClassNotFoundException {
 		serializedMethodInvocation = (SerializedValue<RemoteRpcInvocation.MethodInvocation>) ois.readObject();
 		methodInvocation = null;
-		log.info("===RemoteRpcInvocation===134==="+serializedMethodInvocation.deserializeValue(ClassLoader.getSystemClassLoader()).methodName);try { Integer.parseInt("RemoteRpcInvocation"); }catch (Exception e){log.error("===", e);}
+		log.info("===RemoteRpcInvocation===134==="+serializedMethodInvocation.deserializeValue(ClassLoader.getSystemClassLoader()).methodName);//try { Integer.parseInt("RemoteRpcInvocation"); }catch (Exception e){log.error("===", e);}
 	}
 	// -------------------------------------------------------------------
 	// Utility classes

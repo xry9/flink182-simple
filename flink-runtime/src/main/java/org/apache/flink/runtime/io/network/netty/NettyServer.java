@@ -101,7 +101,7 @@ class NettyServer {
 
 		// Server bind address
 		bootstrap.localAddress(config.getServerAddress(), config.getServerPort());
-
+		LOG.info("===init===104==="+config.getServerAddress()+"==="+config.getServerPort());
 		// Pooled allocators for Netty's ByteBuf instances
 		bootstrap.option(ChannelOption.ALLOCATOR, nettyBufferPool);
 		bootstrap.childOption(ChannelOption.ALLOCATOR, nettyBufferPool);
@@ -149,7 +149,7 @@ class NettyServer {
 				if (sslHandlerFactory != null) {
 					channel.pipeline().addLast("ssl", sslHandlerFactory.createNettySSLHandler());
 				}
-
+				LOG.info("===init===152===");
 				channel.pipeline().addLast(protocol.getServerChannelHandlers());
 			}
 		});
@@ -163,7 +163,7 @@ class NettyServer {
 		localAddress = (InetSocketAddress) bindFuture.channel().localAddress();
 		final long duration = (System.nanoTime() - start) / 1_000_000;
 		LOG.info("Successful initialization (took {} ms). Listening on SocketAddress {}.", duration, localAddress);
-		LOG.info("===init===166==="+localAddress);try { Integer.parseInt("init"); }catch (Exception e){LOG.error("===", e);}
+		LOG.info("===init===166==="+localAddress);//try { Integer.parseInt("init"); }catch (Exception e){LOG.error("===", e);}
 	}
 
 	NettyConfig getConfig() {

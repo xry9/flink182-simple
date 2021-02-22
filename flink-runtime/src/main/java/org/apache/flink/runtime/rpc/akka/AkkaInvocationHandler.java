@@ -117,7 +117,7 @@ class AkkaInvocationHandler implements InvocationHandler, AkkaBasedEndpoint, Rpc
 
 
 
-		LOG.info("===invoke===120==="+method.getName()+"==="+(declaringClass.equals(AkkaBasedEndpoint.class) || declaringClass.equals(Object.class) || declaringClass.equals(RpcGateway.class) || declaringClass.equals(StartStoppable.class) || declaringClass.equals(MainThreadExecutable.class) || declaringClass.equals(RpcServer.class))+"==="+(declaringClass.equals(FencedRpcGateway.class)));//try { Integer.parseInt("invoke"); }catch (Exception e){LOG.error("===", e);}
+		LOG.info("===invoke===120==="+(declaringClass.equals(AkkaBasedEndpoint.class) || declaringClass.equals(Object.class) || declaringClass.equals(RpcGateway.class) || declaringClass.equals(StartStoppable.class) || declaringClass.equals(MainThreadExecutable.class) || declaringClass.equals(RpcServer.class))+"==="+(declaringClass.equals(FencedRpcGateway.class))+"==="+address+"==="+method.getName());//try { Integer.parseInt("invoke"); }catch (Exception e){LOG.error("===", e);}
 		if (declaringClass.equals(AkkaBasedEndpoint.class) || declaringClass.equals(Object.class) || declaringClass.equals(RpcGateway.class) || declaringClass.equals(StartStoppable.class) || declaringClass.equals(MainThreadExecutable.class) || declaringClass.equals(RpcServer.class)) {
 			result = method.invoke(this, args);
 		} else if (declaringClass.equals(FencedRpcGateway.class)) {
@@ -337,7 +337,7 @@ class AkkaInvocationHandler implements InvocationHandler, AkkaBasedEndpoint, Rpc
 	 * @param message to send to the RPC endpoint.
 	 */
 	protected void tell(Object message) {
-		LOG.info("===tell===340==="+message.getClass().getName()+"==="+rpcEndpoint.getClass().getName()+"-"+rpcEndpoint.hashCode());try { Integer.parseInt("tell"); }catch (Exception e){LOG.error("===", e);}
+		LOG.info("===tell===340==="+message.getClass().getName()+"==="+rpcEndpoint.getClass().getName()+"-"+rpcEndpoint.hashCode());//try { Integer.parseInt("tell"); }catch (Exception e){LOG.error("===", e);}
 		rpcEndpoint.tell(message, ActorRef.noSender());
 	}
 	/**
@@ -349,7 +349,7 @@ class AkkaInvocationHandler implements InvocationHandler, AkkaBasedEndpoint, Rpc
 	 * @return Response future
 	 */
 	protected CompletableFuture<?> ask(Object message, Time timeout) {
-		LOG.info("===ask===352==="+message.getClass().getSimpleName()+"==="+rpcEndpoint.hashCode());try { Integer.parseInt("ask"); }catch (Exception e){LOG.error("===", e);}
+		LOG.info("===ask===352==="+message.getClass().getSimpleName()+"==="+rpcEndpoint.hashCode());//try { Integer.parseInt("ask"); }catch (Exception e){LOG.error("===", e);}
 		return FutureUtils.toJava(Patterns.ask(rpcEndpoint, message, timeout.toMilliseconds()));
 	}
 

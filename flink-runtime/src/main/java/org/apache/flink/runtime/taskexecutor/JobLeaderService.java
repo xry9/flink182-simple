@@ -124,7 +124,7 @@ public class JobLeaderService {
 		} else {
 			LOG.info("Start job leader service.");
 			this.ownerAddress = Preconditions.checkNotNull(initialOwnerAddress);
-			LOG.info("===start===127==="+initialOwnerAddress);try { Integer.parseInt("start"); }catch (Exception e){LOG.error("===", e);}
+			LOG.info("===start===127==="+initialOwnerAddress);//try { Integer.parseInt("start"); }catch (Exception e){LOG.error("===", e);}
 			this.rpcService = Preconditions.checkNotNull(initialRpcService);
 			this.highAvailabilityServices = Preconditions.checkNotNull(initialHighAvailabilityServices);
 			this.jobLeaderListener = Preconditions.checkNotNull(initialJobLeaderListener);

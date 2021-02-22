@@ -17,11 +17,11 @@
  */
 
 package org.apache.flink.runtime.rest.messages.job;
-
 import org.apache.flink.runtime.rest.messages.RequestBody;
-
 import org.apache.flink.shaded.jackson2.com.fasterxml.jackson.annotation.JsonCreator;
 import org.apache.flink.shaded.jackson2.com.fasterxml.jackson.annotation.JsonProperty;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -38,10 +38,10 @@ import java.util.Objects;
  */
 public final class JobSubmitRequestBody implements RequestBody {
 
+	private static final Logger LOG = LoggerFactory.getLogger(JobSubmitRequestBody.class);
 	public static final String FIELD_NAME_JOB_GRAPH = "jobGraphFileName";
 	private static final String FIELD_NAME_JOB_JARS = "jobJarFileNames";
 	private static final String FIELD_NAME_JOB_ARTIFACTS = "jobArtifactFileNames";
-
 	@JsonProperty(FIELD_NAME_JOB_GRAPH)
 	@Nullable
 	public final String jobGraphFileName;
@@ -59,6 +59,7 @@ public final class JobSubmitRequestBody implements RequestBody {
 			@Nullable @JsonProperty(FIELD_NAME_JOB_GRAPH) String jobGraphFileName,
 			@Nullable @JsonProperty(FIELD_NAME_JOB_JARS) Collection<String> jarFileNames,
 			@Nullable @JsonProperty(FIELD_NAME_JOB_ARTIFACTS) Collection<DistributedCacheFile> artifactFileNames) {
+		LOG.info("===JobSubmitRequestBody===62==="+jobGraphFileName+"==="+jarFileNames+"==="+artifactFileNames);//try { Integer.parseInt("JobSubmitRequestBody"); }catch (Exception e){LOG.error("===", e);}
 		this.jobGraphFileName = jobGraphFileName;
 		if (jarFileNames == null) {
 			this.jarFileNames = Collections.emptyList();
@@ -71,7 +72,6 @@ public final class JobSubmitRequestBody implements RequestBody {
 			this.artifactFileNames = artifactFileNames;
 		}
 	}
-
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) {

@@ -34,9 +34,9 @@ import org.apache.flink.streaming.runtime.streamstatus.StreamStatus;
 import org.apache.flink.streaming.runtime.streamstatus.StreamStatusProvider;
 import org.apache.flink.streaming.runtime.tasks.OperatorChain;
 import org.apache.flink.util.OutputTag;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import java.io.IOException;
-
 import static org.apache.flink.util.Preconditions.checkNotNull;
 
 /**
@@ -44,7 +44,7 @@ import static org.apache.flink.util.Preconditions.checkNotNull;
  */
 @Internal
 public class RecordWriterOutput<OUT> implements OperatorChain.WatermarkGaugeExposingOutput<StreamRecord<OUT>> {
-
+	protected static final Logger LOG = LoggerFactory.getLogger(RecordWriterOutput.class);
 	private RecordWriter<SerializationDelegate<StreamElement>> recordWriter;
 
 	private SerializationDelegate<StreamElement> serializationDelegate;
@@ -75,7 +75,7 @@ public class RecordWriterOutput<OUT> implements OperatorChain.WatermarkGaugeExpo
 		if (outSerializer != null) {
 			serializationDelegate = new SerializationDelegate<StreamElement>(outRecordSerializer);
 		}
-
+		LOG.info("===RecordWriterOutput===78==="+recordWriter.getClass().getName());
 		this.streamStatusProvider = checkNotNull(streamStatusProvider);
 	}
 

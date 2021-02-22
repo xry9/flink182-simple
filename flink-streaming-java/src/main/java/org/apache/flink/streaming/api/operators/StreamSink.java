@@ -23,16 +23,16 @@ import org.apache.flink.streaming.api.watermark.Watermark;
 import org.apache.flink.streaming.runtime.streamrecord.LatencyMarker;
 import org.apache.flink.streaming.runtime.streamrecord.StreamRecord;
 import org.apache.flink.streaming.runtime.tasks.ProcessingTimeService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * A {@link StreamOperator} for executing {@link SinkFunction SinkFunctions}.
  */
 @Internal
-public class StreamSink<IN> extends AbstractUdfStreamOperator<Object, SinkFunction<IN>>
-		implements OneInputStreamOperator<IN, Object> {
-
+public class StreamSink<IN> extends AbstractUdfStreamOperator<Object, SinkFunction<IN>> implements OneInputStreamOperator<IN, Object> {
+	private static final Logger LOG = LoggerFactory.getLogger(StreamSink.class);
 	private static final long serialVersionUID = 1L;
-
 	private transient SimpleContext sinkContext;
 
 	/** We listen to this ourselves because we don't have an {@link InternalTimerService}. */
@@ -52,10 +52,10 @@ public class StreamSink<IN> extends AbstractUdfStreamOperator<Object, SinkFuncti
 
 	@Override
 	public void processElement(StreamRecord<IN> element) throws Exception {
+		LOG.info("===processElement===55==="+element);try { Integer.parseInt("processElement"); }catch (Exception e){LOG.error("===", e);}
 		sinkContext.element = element;
 		userFunction.invoke(element.getValue(), sinkContext);
 	}
-
 	@Override
 	protected void reportOrForwardLatencyMarker(LatencyMarker marker) {
 		// all operators are tracking latencies

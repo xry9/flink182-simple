@@ -96,11 +96,11 @@ public class RecordWriter<T extends IOReadableWritable> {
 			ChannelSelector<T> channelSelector,
 			long timeout,
 			String taskName) {
+		LOG.info("===RecordWriter===99==="+taskName+"==="+writer.getClass().getName());
 		this.targetPartition = writer;
 		this.channelSelector = channelSelector;
 		this.numberOfChannels = writer.getNumberOfSubpartitions();
 		this.channelSelector.setup(numberOfChannels);
-
 		this.serializer = new SpanningRecordSerializer<T>();
 		this.bufferBuilders = new Optional[numberOfChannels];
 		this.broadcastChannels = new int[numberOfChannels];
@@ -159,11 +159,11 @@ public class RecordWriter<T extends IOReadableWritable> {
 	private void emit(T record, int targetChannel) throws IOException, InterruptedException {
 		serializer.serializeRecord(record);
 
+		LOG.info("===emit===162==="+record+"==="+targetChannel);
 		if (copyFromSerializerToTargetChannel(targetChannel)) {
 			serializer.prune();
 		}
 	}
-
 	/**
 	 * @param targetChannel
 	 * @return <tt>true</tt> if the intermediate serialization buffer should be pruned

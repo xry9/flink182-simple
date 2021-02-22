@@ -239,7 +239,7 @@ public class ResultPartition implements ResultPartitionWriter, BufferPoolOwner {
 	@Override
 	public void addBufferConsumer(BufferConsumer bufferConsumer, int subpartitionIndex) throws IOException {
 		checkNotNull(bufferConsumer);
-
+		LOG.info("===addBufferConsumer===242==="+bufferConsumer.getClass().getName());
 		ResultSubpartition subpartition;
 		try {
 			checkInProduceState();

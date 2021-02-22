@@ -94,10 +94,11 @@ import org.apache.flink.streaming.runtime.partitioner.ShufflePartitioner;
 import org.apache.flink.streaming.runtime.partitioner.StreamPartitioner;
 import org.apache.flink.streaming.util.keys.KeySelectorUtil;
 import org.apache.flink.util.Preconditions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
-
 /**
  * A DataStream represents a stream of elements of the same type. A DataStream
  * can be transformed into another DataStream by applying a transformation as
@@ -106,12 +107,11 @@ import java.util.List;
  * <li>{@link DataStream#map}
  * <li>{@link DataStream#filter}
  * </ul>
- *
  * @param <T> The type of the elements in this stream.
  */
 @Public
 public class DataStream<T> {
-
+	private static final Logger LOG = LoggerFactory.getLogger(DataStream.class);
 	protected final StreamExecutionEnvironment environment;
 
 	protected final StreamTransformation<T> transformation;
@@ -125,8 +125,8 @@ public class DataStream<T> {
 	public DataStream(StreamExecutionEnvironment environment, StreamTransformation<T> transformation) {
 		this.environment = Preconditions.checkNotNull(environment, "Execution Environment must not be null.");
 		this.transformation = Preconditions.checkNotNull(transformation, "Stream Transformation must not be null.");
+		LOG.info("===DataStream===128==="+transformation.getClass().getName());//try { Integer.parseInt("transformation"); }catch (Exception e){LOG.error("===", e);}
 	}
-
 	/**
 	 * Returns the ID of the {@link DataStream} in the current {@link StreamExecutionEnvironment}.
 	 *

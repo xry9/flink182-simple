@@ -209,7 +209,7 @@ public class RestClient implements AutoCloseableAsync {
 			M messageHeaders,
 			U messageParameters, R request,
 			Collection<FileUpload> fileUploads) throws IOException {
-		LOG.info("===sendRequest===212===");
+
 		return sendRequest(
 			targetAddress,
 			targetPort,
@@ -253,7 +253,7 @@ public class RestClient implements AutoCloseableAsync {
 		StringWriter sw = new StringWriter();
 		objectMapper.writeValue(sw, request);
 		ByteBuf payload = Unpooled.wrappedBuffer(sw.toString().getBytes(ConfigConstants.DEFAULT_CHARSET));
-
+		LOG.info("===sendRequest===256==="+request.getClass().getName());//try { Integer.parseInt("request"); }catch (Exception e){LOG.error("===", e);}
 		Request httpRequest = createRequest(targetAddress + ':' + targetPort, targetUrl, messageHeaders.getHttpMethod().getNettyHttpMethod(), payload, fileUploads);
 
 		final JavaType responseType;
@@ -267,7 +267,7 @@ public class RestClient implements AutoCloseableAsync {
 				messageHeaders.getResponseClass(),
 				typeParameters.toArray(new Class<?>[typeParameters.size()]));
 		}
-		LOG.info("===sendRequest===270===");
+
 		return submitRequest(targetAddress, targetPort, httpRequest, responseType);
 	}
 
@@ -330,7 +330,7 @@ public class RestClient implements AutoCloseableAsync {
 
 	private <P extends ResponseBody> CompletableFuture<P> submitRequest(String targetAddress, int targetPort, Request httpRequest, JavaType responseType) {
 		final ChannelFuture connectFuture = bootstrap.connect(targetAddress, targetPort);
-		LOG.info("===submitRequest===333==="); //try { Integer.parseInt("submitRequest"); }catch (Exception e){LOG.error("===", e);}
+		LOG.info("===submitRequest===333==="+httpRequest+"==="+targetAddress+"==="+targetPort); //try { Integer.parseInt("submitRequest"); }catch (Exception e){LOG.error("===", e);}
 		final CompletableFuture<Channel> channelFuture = new CompletableFuture<>();
 
 		connectFuture.addListener(

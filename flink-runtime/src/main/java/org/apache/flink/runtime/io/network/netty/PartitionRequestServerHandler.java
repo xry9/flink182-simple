@@ -56,7 +56,7 @@ class PartitionRequestServerHandler extends SimpleChannelInboundHandler<NettyMes
 		TaskEventDispatcher taskEventDispatcher,
 		PartitionRequestQueue outboundQueue,
 		boolean creditBasedEnabled) {
-
+		LOG.info("===PartitionRequestServerHandler===59===");
 		this.partitionProvider = partitionProvider;
 		this.taskEventDispatcher = taskEventDispatcher;
 		this.outboundQueue = outboundQueue;

@@ -25,15 +25,15 @@ import org.apache.flink.api.java.tuple.Tuple;
 import org.apache.flink.api.java.typeutils.TupleTypeInfo;
 import org.apache.flink.streaming.util.typeutils.FieldAccessor;
 import org.apache.flink.streaming.util.typeutils.FieldAccessorFactory;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 /**
  * An {@link AggregationFunction} that sums up fields.
  */
 @Internal
 public class SumAggregator<T> extends AggregationFunction<T> {
-
+	private static final Logger LOG = LoggerFactory.getLogger(SumAggregator.class);
 	private static final long serialVersionUID = 1L;
-
 	private final FieldAccessor<T, Object> fieldAccessor;
 	private final SumFunction adder;
 	private final TypeSerializer<T> serializer;
@@ -62,10 +62,10 @@ public class SumAggregator<T> extends AggregationFunction<T> {
 			this.serializer = typeInfo.createSerializer(config);
 		}
 	}
-
 	@Override
 	@SuppressWarnings("unchecked")
 	public T reduce(T value1, T value2) throws Exception {
+		LOG.info("===reduce===68===");try { Integer.parseInt("reduce"); }catch (Exception e){LOG.error("===", e);}
 		if (isTuple) {
 			Tuple result = ((Tuple) value1).copy();
 			return fieldAccessor.set((T) result, adder.add(fieldAccessor.get(value1), fieldAccessor.get(value2)));

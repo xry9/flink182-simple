@@ -20,15 +20,15 @@ package org.apache.flink.streaming.api.operators;
 import org.apache.flink.annotation.Internal;
 import org.apache.flink.api.common.functions.FlatMapFunction;
 import org.apache.flink.streaming.runtime.streamrecord.StreamRecord;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * A {@link StreamOperator} for executing {@link FlatMapFunction FlatMapFunctions}.
  */
 @Internal
-public class StreamFlatMap<IN, OUT>
-		extends AbstractUdfStreamOperator<OUT, FlatMapFunction<IN, OUT>>
-		implements OneInputStreamOperator<IN, OUT> {
-
+public class StreamFlatMap<IN, OUT> extends AbstractUdfStreamOperator<OUT, FlatMapFunction<IN, OUT>> implements OneInputStreamOperator<IN, OUT> {
+	private static final Logger LOG = LoggerFactory.getLogger(StreamFlatMap.class);
 	private static final long serialVersionUID = 1L;
 
 	private transient TimestampedCollector<OUT> collector;
@@ -43,9 +43,9 @@ public class StreamFlatMap<IN, OUT>
 		super.open();
 		collector = new TimestampedCollector<>(output);
 	}
-
 	@Override
 	public void processElement(StreamRecord<IN> element) throws Exception {
+		LOG.info("===processElement===48==="+element+"==="+userFunction.getClass().getName()+"==="+collector.getClass().getName());
 		collector.setTimestamp(element);
 		userFunction.flatMap(element.getValue(), collector);
 	}

@@ -72,7 +72,7 @@ public abstract class LeaderRetrievalHandler<T extends RestfulGateway> extends S
 		RoutedRequest routedRequest) {
 
 		HttpRequest request = routedRequest.getRequest();
-		//logger.info("===channelRead0===75==="+request.uri()+"==="+this.getClass().getName());try { Integer.parseInt("channelRead0"); }catch (Exception e){logger.error("===", e);}
+		logger.info("===channelRead0===75==="+request.uri()+"==="+this.getClass().getName()+"==="+routedRequest);//try { Integer.parseInt("channelRead0"); }catch (Exception e){logger.error("===", e);}
 		OptionalConsumer<? extends T> optLeaderConsumer = OptionalConsumer.of(leaderRetriever.getNow());
 
 		optLeaderConsumer.ifPresent(

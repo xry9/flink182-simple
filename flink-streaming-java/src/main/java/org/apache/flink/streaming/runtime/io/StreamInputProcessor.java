@@ -127,7 +127,7 @@ public class StreamInputProcessor<IN> {
 
 		this.barrierHandler = InputProcessorUtil.createCheckpointBarrierHandler(
 			checkpointedTask, checkpointMode, ioManager, inputGate, taskManagerConfig);
-
+		LOG.info("===StreamInputProcessor===130==="+barrierHandler.getClass().getName()+"==="+ioManager.getClass().getName()+"==="+inputGate.getClass().getName());
 		this.lock = checkNotNull(lock);
 
 		StreamElementSerializer<IN> ser = new StreamElementSerializer<>(inputSerializer);

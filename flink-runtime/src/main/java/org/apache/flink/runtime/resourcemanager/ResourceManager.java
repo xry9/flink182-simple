@@ -746,7 +746,7 @@ public abstract class ResourceManager<WorkerType extends ResourceIDRetrievable>
 		} else {
 			WorkerRegistration<WorkerType> registration =
 				new WorkerRegistration<>(taskExecutorGateway, newWorker, dataPort, hardwareDescription);
-
+			log.info("===registerTaskExecutorInternal===749==="+taskExecutorAddress);try { Integer.parseInt("taskExecutorAddress"); }catch (Exception e){log.error("===", e);}
 			log.info("Registering TaskManager with ResourceID {} ({}) at ResourceManager", taskExecutorResourceId, taskExecutorAddress);
 			taskExecutors.put(taskExecutorResourceId, registration);
 

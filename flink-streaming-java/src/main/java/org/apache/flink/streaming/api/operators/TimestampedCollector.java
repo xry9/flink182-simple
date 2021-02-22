@@ -21,19 +21,19 @@ package org.apache.flink.streaming.api.operators;
 import org.apache.flink.annotation.Internal;
 import org.apache.flink.streaming.runtime.streamrecord.StreamRecord;
 import org.apache.flink.util.Collector;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 /**
  * Wrapper around an {@link Output} for user functions that expect a {@link Collector}.
  * Before giving the {@link TimestampedCollector} to a user function you must set
  * the timestamp that should be attached to emitted elements. Most operators
  * would set the timestamp of the incoming
  * {@link org.apache.flink.streaming.runtime.streamrecord.StreamRecord} here.
- *
  * @param <T> The type of the elements that can be emitted.
  */
 @Internal
 public class TimestampedCollector<T> implements Collector<T> {
-
+	private static final Logger LOG = LoggerFactory.getLogger(TimestampedCollector.class);
 	private final Output<StreamRecord<T>> output;
 
 	private final StreamRecord<T> reuse;
@@ -44,8 +44,8 @@ public class TimestampedCollector<T> implements Collector<T> {
 	public TimestampedCollector(Output<StreamRecord<T>> output) {
 		this.output = output;
 		this.reuse = new StreamRecord<T>(null);
+		LOG.info("===TimestampedCollector===47==="+output.getClass().getName());
 	}
-
 	@Override
 	public void collect(T record) {
 		output.collect(reuse.replace(record));

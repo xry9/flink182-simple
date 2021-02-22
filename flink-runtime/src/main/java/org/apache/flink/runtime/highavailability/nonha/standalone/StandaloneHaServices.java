@@ -68,7 +68,7 @@ public class StandaloneHaServices extends AbstractNonHaServices {
 		this.dispatcherAddress = checkNotNull(dispatcherAddress, "dispatcherAddress");
 		this.jobManagerAddress = checkNotNull(jobManagerAddress, "jobManagerAddress");
 		this.webMonitorAddress = checkNotNull(webMonitorAddress, webMonitorAddress);
-		LOG.info("===StandaloneHaServices===71==="+resourceManagerAddress+"==="+dispatcherAddress+"==="+jobManagerAddress);try { Integer.parseInt("StandaloneHaServices"); }catch (Exception e){LOG.error("===", e);}
+		LOG.info("===StandaloneHaServices===71==="+resourceManagerAddress+"==="+dispatcherAddress+"==="+jobManagerAddress); //try { Integer.parseInt("StandaloneHaServices"); }catch (Exception e){LOG.error("===", e);}
 	}
 	// ------------------------------------------------------------------------
 	//  Services
@@ -88,7 +88,7 @@ public class StandaloneHaServices extends AbstractNonHaServices {
 	public LeaderRetrievalService getDispatcherLeaderRetriever() {
 		synchronized (lock) {
 			checkNotShutdown();
-
+			LOG.info("===getDispatcherLeaderRetriever===91===");//try { Integer.parseInt("getDispatcherLeaderRetriever"); }catch (Exception e){LOG.error("===", e);}
 			return new StandaloneLeaderRetrievalService(dispatcherAddress, DEFAULT_LEADER_ID);
 		}
 	}

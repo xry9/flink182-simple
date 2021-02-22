@@ -24,6 +24,8 @@ import org.apache.flink.shaded.netty4.io.netty.buffer.AbstractReferenceCountedBy
 import org.apache.flink.shaded.netty4.io.netty.buffer.ByteBuf;
 import org.apache.flink.shaded.netty4.io.netty.buffer.ByteBufAllocator;
 import org.apache.flink.shaded.netty4.io.netty.buffer.Unpooled;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -34,9 +36,7 @@ import java.nio.channels.ClosedChannelException;
 import java.nio.channels.FileChannel;
 import java.nio.channels.GatheringByteChannel;
 import java.nio.channels.ScatteringByteChannel;
-
 import static org.apache.flink.util.Preconditions.checkNotNull;
-
 /**
  * Wrapper for pooled {@link MemorySegment} instances.
  *
@@ -44,7 +44,7 @@ import static org.apache.flink.util.Preconditions.checkNotNull;
  * set via {@link #setAllocator(ByteBufAllocator)}!
  */
 public class NetworkBuffer extends AbstractReferenceCountedByteBuf implements Buffer {
-
+	private static final Logger LOG = LoggerFactory.getLogger(NetworkBuffer.class);
 	/** The backing {@link MemorySegment} instance. */
 	private final MemorySegment memorySegment;
 
@@ -111,24 +111,24 @@ public class NetworkBuffer extends AbstractReferenceCountedByteBuf implements Bu
 		this.isBuffer = isBuffer;
 		this.currentSize = memorySegment.size();
 		setSize(size);
+		LOG.info("===NetworkBuffer===114==="+memorySegment.getClass().getName());
 	}
-
 	@Override
 	public boolean isBuffer() {
+//		LOG.info("===NetworkBuffer===118===");
 		return isBuffer;
 	}
-
 	@Override
 	public void tagAsEvent() {
 		ensureAccessible();
-
+//		LOG.info("===NetworkBuffer===124===");
 		isBuffer = false;
 	}
 
 	@Override
 	public MemorySegment getMemorySegment() {
 		ensureAccessible();
-
+		LOG.info("===NetworkBuffer===131===");
 		return memorySegment;
 	}
 
@@ -174,9 +174,9 @@ public class NetworkBuffer extends AbstractReferenceCountedByteBuf implements Bu
 
 	@Override
 	protected byte _getByte(int index) {
+		LOG.info("===NetworkBuffer===177===");
 		return memorySegment.get(index);
 	}
-
 	@Override
 	protected short _getShort(int index) {
 		return memorySegment.getShortBigEndian(index);
@@ -338,7 +338,7 @@ public class NetworkBuffer extends AbstractReferenceCountedByteBuf implements Bu
 	public ByteBuf getBytes(int index, ByteBuf dst, int dstIndex, int length) {
 		// from UnpooledDirectByteBuf:
 		checkDstIndex(index, length, dstIndex, dst.capacity());
-
+		LOG.info("===getBytes===341===");
 		if (dst.hasArray()) {
 			getBytes(index, dst.array(), dst.arrayOffset() + dstIndex, length);
 		} else if (dst.nioBufferCount() > 0) {
@@ -356,7 +356,7 @@ public class NetworkBuffer extends AbstractReferenceCountedByteBuf implements Bu
 	@Override
 	public ByteBuf getBytes(int index, byte[] dst, int dstIndex, int length) {
 		checkDstIndex(index, length, dstIndex, dst.length);
-
+		LOG.info("===getBytes===359===");
 		memorySegment.get(index, dst, dstIndex, length);
 		return this;
 	}
@@ -364,7 +364,7 @@ public class NetworkBuffer extends AbstractReferenceCountedByteBuf implements Bu
 	@Override
 	public ByteBuf getBytes(int index, ByteBuffer dst) {
 		checkIndex(index, dst.remaining());
-
+		LOG.info("===getBytes===367===");
 		memorySegment.get(index, dst, dst.remaining());
 		return this;
 	}
@@ -372,11 +372,11 @@ public class NetworkBuffer extends AbstractReferenceCountedByteBuf implements Bu
 	@Override
 	public ByteBuf getBytes(int index, OutputStream out, int length) throws IOException {
 		// adapted from UnpooledDirectByteBuf:
+		LOG.info("===getBytes===375===");
 		checkIndex(index, length);
 		if (length == 0) {
 			return this;
 		}
-
 		if (memorySegment.isOffHeap()) {
 			byte[] tmp = new byte[length];
 			ByteBuffer tmpBuf = memorySegment.wrap(index, length);
@@ -392,11 +392,11 @@ public class NetworkBuffer extends AbstractReferenceCountedByteBuf implements Bu
 	@Override
 	public int getBytes(int index, GatheringByteChannel out, int length) throws IOException {
 		// adapted from UnpooledDirectByteBuf:
+		LOG.info("===getBytes===395===");
 		checkIndex(index, length);
 		if (length == 0) {
 			return 0;
 		}
-
 		ByteBuffer tmpBuf = memorySegment.wrap(index, length);
 		return out.write(tmpBuf);
 	}
@@ -404,17 +404,17 @@ public class NetworkBuffer extends AbstractReferenceCountedByteBuf implements Bu
 	@Override
 	public int getBytes(int index, FileChannel out, long position, int length) throws IOException {
 		// adapted from UnpooledDirectByteBuf:
+		LOG.info("===getBytes===407===");
 		checkIndex(index, length);
 		if (length == 0) {
 			return 0;
 		}
-
 		ByteBuffer tmpBuf = memorySegment.wrap(index, length);
 		return out.write(tmpBuf, position);
 	}
-
 	@Override
 	public ByteBuf setBytes(int index, ByteBuf src, int srcIndex, int length) {
+		LOG.info("===setBytes===417===");
 		// from UnpooledDirectByteBuf:
 		checkSrcIndex(index, length, srcIndex, src.capacity());
 		if (src.nioBufferCount() > 0) {
@@ -431,9 +431,9 @@ public class NetworkBuffer extends AbstractReferenceCountedByteBuf implements Bu
 
 	@Override
 	public ByteBuf setBytes(int index, byte[] src, int srcIndex, int length) {
+		LOG.info("===setBytes===434===");
 		// adapted from UnpooledDirectByteBuf:
 		checkSrcIndex(index, length, srcIndex, src.length);
-
 		ByteBuffer tmpBuf = memorySegment.wrap(index, length);
 		tmpBuf.put(src, srcIndex, length);
 		return this;
@@ -441,9 +441,9 @@ public class NetworkBuffer extends AbstractReferenceCountedByteBuf implements Bu
 
 	@Override
 	public ByteBuf setBytes(int index, ByteBuffer src) {
+		LOG.info("===setBytes===444===");
 		// adapted from UnpooledDirectByteBuf:
 		checkIndex(index, src.remaining());
-
 		ByteBuffer tmpBuf = memorySegment.wrap(index, src.remaining());
 		tmpBuf.put(src);
 		return this;
@@ -453,7 +453,7 @@ public class NetworkBuffer extends AbstractReferenceCountedByteBuf implements Bu
 	public int setBytes(int index, InputStream in, int length) throws IOException {
 		// adapted from UnpooledDirectByteBuf:
 		checkIndex(index, length);
-
+		LOG.info("===setBytes===456===");
 		if (memorySegment.isOffHeap()) {
 			byte[] tmp = new byte[length];
 			int readBytes = in.read(tmp);
@@ -472,7 +472,7 @@ public class NetworkBuffer extends AbstractReferenceCountedByteBuf implements Bu
 	public int setBytes(int index, ScatteringByteChannel in, int length) throws IOException {
 		// adapted from UnpooledDirectByteBuf:
 		checkIndex(index, length);
-
+		LOG.info("===setBytes===475===");
 		ByteBuffer tmpBuf = memorySegment.wrap(index, length);
 		try {
 			return in.read(tmpBuf);
@@ -485,7 +485,7 @@ public class NetworkBuffer extends AbstractReferenceCountedByteBuf implements Bu
 	public int setBytes(int index, FileChannel in, long position, int length) throws IOException {
 		// adapted from UnpooledDirectByteBuf:
 		checkIndex(index, length);
-
+		LOG.info("===setBytes===488===");
 		ByteBuffer tmpBuf = memorySegment.wrap(index, length);
 		try {
 			return in.read(tmpBuf, position);
@@ -507,7 +507,7 @@ public class NetworkBuffer extends AbstractReferenceCountedByteBuf implements Bu
 	@Override
 	public ByteBuf copy(int index, int length) {
 		checkIndex(index, length);
-
+		LOG.info("===copy===510===");
 		ByteBuf copy = alloc().buffer(length, maxCapacity());
 		copy.writeBytes(this, index, length);
 		return copy;
@@ -515,12 +515,12 @@ public class NetworkBuffer extends AbstractReferenceCountedByteBuf implements Bu
 
 	@Override
 	public ByteBuf readBytes(int length) {
+		LOG.info("===readBytes===518===");
 		// copied from the one in netty 4.0.50 fixing the wrong allocator being used
 		checkReadableBytes(length);
 		if (length == 0) {
 			return Unpooled.EMPTY_BUFFER;
 		}
-
 		ByteBuf buf = alloc().buffer(length, maxCapacity());
 		int readerIndex = readerIndex();
 		buf.writeBytes(this, readerIndex, length);

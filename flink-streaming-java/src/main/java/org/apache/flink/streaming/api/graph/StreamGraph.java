@@ -195,7 +195,7 @@ public class StreamGraph extends StreamingPlan {
 			TypeInformation<OUT> outTypeInfo,
 			String operatorName) {
 
-		LOG.info("===addOperator===198==="+(operatorObject instanceof StoppableStreamSource)+"==="+(operatorObject instanceof StreamSource)+"==="+operatorObject.getClass().getName());try { Integer.parseInt("addOperator"); }catch (Exception e){LOG.error("===", e);}
+		LOG.info("===addOperator===198==="+(operatorObject instanceof StoppableStreamSource)+"==="+(operatorObject instanceof StreamSource)+"==="+operatorObject.getClass().getName());//try { Integer.parseInt("addOperator"); }catch (Exception e){LOG.error("===", e);}
 		if (operatorObject instanceof StoppableStreamSource) {
 			addNode(vertexID, slotSharingGroup, coLocationGroup, StoppableSourceStreamTask.class, operatorObject, operatorName);
 		} else if (operatorObject instanceof StreamSource) {

@@ -343,7 +343,7 @@ public abstract class RpcEndpoint implements RpcGateway, AutoCloseableAsync {
 
 		public void runAsync(Runnable runnable) {
 			gateway.runAsync(runnable);
-			LOG.info("===runAsync===346==="+runnable);try { Integer.parseInt("runAsync"); }catch (Exception e){LOG.error("===", e);}
+			LOG.info("===runAsync===346==="+runnable);//try { Integer.parseInt("runAsync"); }catch (Exception e){LOG.error("===", e);}
 		}
 		public void scheduleRunAsync(Runnable runnable, long delayMillis) {
 			gateway.scheduleRunAsync(runnable, delayMillis);
@@ -358,7 +358,7 @@ public abstract class RpcEndpoint implements RpcGateway, AutoCloseableAsync {
 			final long delayMillis = TimeUnit.MILLISECONDS.convert(delay, unit);
 			FutureTask<Void> ft = new FutureTask<>(command, null);
 			scheduleRunAsync(ft, delayMillis);
-			LOG.info("===schedule===361==="+command.getClass().getName());try { Integer.parseInt("schedule"); }catch (Exception e){LOG.error("===", e);}
+			LOG.info("===schedule===361==="+command.getClass().getName());//try { Integer.parseInt("schedule"); }catch (Exception e){LOG.error("===", e);}
 			return new ScheduledFutureAdapter<>(ft, delayMillis, TimeUnit.MILLISECONDS);
 		}
 		@Override

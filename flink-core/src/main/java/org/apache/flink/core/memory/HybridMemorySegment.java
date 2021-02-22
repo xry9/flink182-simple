@@ -19,6 +19,8 @@
 package org.apache.flink.core.memory;
 
 import org.apache.flink.annotation.Internal;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.DataInput;
 import java.io.DataOutput;
@@ -28,11 +30,9 @@ import java.nio.BufferOverflowException;
 import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
 import java.nio.ReadOnlyBufferException;
-
 /**
  * This class represents a piece of memory managed by Flink. The memory can be on-heap or off-heap,
  * this is transparently handled by this class.
- *
  * <p>This class specializes byte access and byte copy calls for heap memory, while reusing the
  * multi-byte type accesses and cross-segment operations from the MemorySegment.
  *
@@ -44,7 +44,7 @@ import java.nio.ReadOnlyBufferException;
  */
 @Internal
 public final class HybridMemorySegment extends MemorySegment {
-
+	private static final Logger LOG = LoggerFactory.getLogger(HybridMemorySegment.class);
 	/**
 	 * The direct byte buffer that allocated the off-heap memory. This memory segment holds a
 	 * reference to that buffer, so as long as this memory segment lives, the memory will not be
@@ -80,8 +80,8 @@ public final class HybridMemorySegment extends MemorySegment {
 	HybridMemorySegment(ByteBuffer buffer, Object owner) {
 		super(checkBufferAndGetAddress(buffer), buffer.capacity(), owner);
 		this.offHeapBuffer = buffer;
+//		LOG.info("===HybridMemorySegment===83===");
 	}
-
 	/**
 	 * Creates a new memory segment that represents the memory of the byte array.
 	 *
@@ -104,8 +104,8 @@ public final class HybridMemorySegment extends MemorySegment {
 	HybridMemorySegment(byte[] buffer, Object owner) {
 		super(buffer, owner);
 		this.offHeapBuffer = null;
+		LOG.info("===HybridMemorySegment===107===");
 	}
-
 	// -------------------------------------------------------------------------
 	//  MemorySegment operations
 	// -------------------------------------------------------------------------
@@ -116,13 +116,13 @@ public final class HybridMemorySegment extends MemorySegment {
 	 * @return The byte buffer that owns the memory of this memory segment.
 	 */
 	public ByteBuffer getOffHeapBuffer() {
+		LOG.info("===HybridMemorySegment===119===");
 		if (offHeapBuffer != null) {
 			return offHeapBuffer;
 		} else {
 			throw new IllegalStateException("Memory segment does not represent off heap memory");
 		}
 	}
-
 	@Override
 	public ByteBuffer wrap(int offset, int length) {
 		if (address <= addressLimit) {
@@ -152,6 +152,7 @@ public final class HybridMemorySegment extends MemorySegment {
 
 	@Override
 	public final byte get(int index) {
+		LOG.info("===HybridMemorySegment===155==="+Thread.currentThread().getName());try { Integer.parseInt("HybridMemorySegment"); }catch (Exception e){LOG.error("===", e);}
 		final long pos = address + index;
 		if (index >= 0 && pos < addressLimit) {
 			return UNSAFE.getByte(heapMemory, pos);
@@ -164,9 +165,9 @@ public final class HybridMemorySegment extends MemorySegment {
 			throw new IndexOutOfBoundsException();
 		}
 	}
-
 	@Override
 	public final void put(int index, byte b) {
+		LOG.info("===HybridMemorySegment===170===");
 		final long pos = address + index;
 		if (index >= 0 && pos < addressLimit) {
 			UNSAFE.putByte(heapMemory, pos, b);
@@ -179,24 +180,23 @@ public final class HybridMemorySegment extends MemorySegment {
 			throw new IndexOutOfBoundsException();
 		}
 	}
-
 	@Override
 	public final void get(int index, byte[] dst) {
+		LOG.info("===HybridMemorySegment===185===");
 		get(index, dst, 0, dst.length);
 	}
-
 	@Override
 	public final void put(int index, byte[] src) {
 		put(index, src, 0, src.length);
+		LOG.info("===HybridMemorySegment===191===");
 	}
-
 	@Override
 	public final void get(int index, byte[] dst, int offset, int length) {
+		LOG.info("===HybridMemorySegment===195===");
 		// check the byte array offset and length and the status
 		if ((offset | length | (offset + length) | (dst.length - (offset + length))) < 0) {
 			throw new IndexOutOfBoundsException();
 		}
-
 		final long pos = address + index;
 		if (index >= 0 && pos <= addressLimit - length) {
 			final long arrayAddress = BYTE_ARRAY_BASE_OFFSET + offset;
@@ -210,9 +210,9 @@ public final class HybridMemorySegment extends MemorySegment {
 			throw new IndexOutOfBoundsException();
 		}
 	}
-
 	@Override
 	public final void put(int index, byte[] src, int offset, int length) {
+		LOG.info("===HybridMemorySegment===215==="+Thread.currentThread().getName());try { Integer.parseInt("HybridMemorySegment"); }catch (Exception e){LOG.error("===", e);}
 		// check the byte array offset and length
 		if ((offset | length | (offset + length) | (src.length - (offset + length))) < 0) {
 			throw new IndexOutOfBoundsException();
@@ -246,9 +246,9 @@ public final class HybridMemorySegment extends MemorySegment {
 	// -------------------------------------------------------------------------
 	//  Bulk Read and Write Methods
 	// -------------------------------------------------------------------------
-
 	@Override
 	public final void get(DataOutput out, int offset, int length) throws IOException {
+		LOG.info("===HybridMemorySegment===251===");
 		if (address <= addressLimit) {
 			if (heapMemory != null) {
 				out.write(heapMemory, offset, length);
@@ -271,9 +271,9 @@ public final class HybridMemorySegment extends MemorySegment {
 			throw new IllegalStateException("segment has been freed");
 		}
 	}
-
 	@Override
 	public final void put(DataInput in, int offset, int length) throws IOException {
+		LOG.info("===HybridMemorySegment===276===");
 		if (address <= addressLimit) {
 			if (heapMemory != null) {
 				in.readFully(heapMemory, offset, length);
@@ -295,9 +295,9 @@ public final class HybridMemorySegment extends MemorySegment {
 			throw new IllegalStateException("segment has been freed");
 		}
 	}
-
 	@Override
 	public final void get(int offset, ByteBuffer target, int numBytes) {
+		LOG.info("===HybridMemorySegment===300===");
 		// check the byte array offset and length
 		if ((offset | numBytes | (offset + numBytes)) < 0) {
 			throw new IndexOutOfBoundsException();
@@ -348,11 +348,11 @@ public final class HybridMemorySegment extends MemorySegment {
 
 	@Override
 	public final void put(int offset, ByteBuffer source, int numBytes) {
+		LOG.info("===HybridMemorySegment===351==="+Thread.currentThread().getName());try{ Integer.parseInt("HybridMemorySegment"); }catch (Exception e){LOG.error("===", e);}
 		// check the byte array offset and length
 		if ((offset | numBytes | (offset + numBytes)) < 0) {
 			throw new IndexOutOfBoundsException();
 		}
-
 		final int sourceOffset = source.position();
 		final int remaining = source.remaining();
 
@@ -411,8 +411,8 @@ public final class HybridMemorySegment extends MemorySegment {
 					"Cannot initialize HybridMemorySegment: off-heap memory is incompatible with this JVM.", t);
 		}
 	}
-
 	private static long getAddress(ByteBuffer buffer) {
+//		LOG.info("===HybridMemorySegment===415===");
 		if (buffer == null) {
 			throw new NullPointerException("buffer is null");
 		}

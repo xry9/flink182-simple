@@ -45,7 +45,7 @@ public class RpcTaskManagerGateway implements TaskManagerGateway {
 	public RpcTaskManagerGateway(TaskExecutorGateway taskExecutorGateway, JobMasterId jobMasterId) {
 		this.taskExecutorGateway = Preconditions.checkNotNull(taskExecutorGateway);
 		this.jobMasterId = Preconditions.checkNotNull(jobMasterId);
-		LOG.info("===RpcTaskManagerGateway===48==="+taskExecutorGateway.getClass().getName()+"===="+getAddress());try { Integer.parseInt("taskExecutorGateway"); }catch (Exception e){LOG.error("===", e);}
+		LOG.info("===RpcTaskManagerGateway===48==="+taskExecutorGateway.getClass().getName()+"===="+getAddress());//try { Integer.parseInt("taskExecutorGateway"); }catch (Exception e){LOG.error("===", e);}
 	}
 	@Override
 	public String getAddress() {

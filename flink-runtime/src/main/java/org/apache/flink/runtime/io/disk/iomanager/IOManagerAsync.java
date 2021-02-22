@@ -301,8 +301,8 @@ public class IOManagerAsync extends IOManager implements UncaughtExceptionHandle
 		protected ReaderThread() {
 			this.requestQueue = new RequestQueue<ReadRequest>();
 			this.alive = true;
+			LOG.info("===ReaderThread===304===");
 		}
-		
 		/**
 		 * Shuts the thread down. This operation does not wait for all pending requests to be served, halts the thread
 		 * immediately. All buffers of pending requests are handed back to their channel readers and an exception is
@@ -345,14 +345,14 @@ public class IOManagerAsync extends IOManager implements UncaughtExceptionHandle
 
 		@Override
 		public void run() {
-			
+			LOG.info("===run===348===");
 			while (alive) {
-				
 				// get the next buffer. ignore interrupts that are not due to a shutdown.
 				ReadRequest request = null;
 				while (alive && request == null) {
 					try {
 						request = this.requestQueue.take();
+						LOG.info("===run===355==="+request.getClass().getName());
 					}
 					catch (InterruptedException e) {
 						if (!this.alive) {
@@ -450,15 +450,15 @@ public class IOManagerAsync extends IOManager implements UncaughtExceptionHandle
 
 		@Override
 		public void run() {
-			
+			LOG.info("===run===453===");
 			while (this.alive) {
 				
 				WriteRequest request = null;
-				
 				// get the next buffer. ignore interrupts that are not due to a shutdown.
 				while (alive && request == null) {
 					try {
 						request = requestQueue.take();
+						LOG.info("===run===461==="+request.getClass().getName());
 					}
 					catch (InterruptedException e) {
 						if (!this.alive) {

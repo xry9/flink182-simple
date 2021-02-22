@@ -1575,7 +1575,7 @@ public abstract class StreamExecutionEnvironment {
 	public void addOperator(StreamTransformation<?> transformation) {
 		Preconditions.checkNotNull(transformation, "transformation must not be null.");
 		this.transformations.add(transformation);
-		LOG.info("===addOperator===1578==="+transformation.getClass().getName());try { Integer.parseInt("addOperator"); }catch (Exception e){LOG.error("===", e);}
+		LOG.info("===addOperator===1578==="+transformation.getClass().getName());//try { Integer.parseInt("addOperator"); }catch (Exception e){LOG.error("===", e);}
 	}
 	// --------------------------------------------------------------------------------------------
 	//  Factory methods for ExecutionEnvironments

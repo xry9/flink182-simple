@@ -17,15 +17,15 @@
  */
 
 package org.apache.flink.streaming.api.transformations;
-
 import org.apache.flink.annotation.Internal;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
 import org.apache.flink.api.java.functions.KeySelector;
 import org.apache.flink.api.java.typeutils.TypeExtractor;
 import org.apache.flink.streaming.api.operators.ChainingStrategy;
 import org.apache.flink.streaming.api.operators.StreamSink;
-
 import org.apache.flink.shaded.guava18.com.google.common.collect.Lists;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Collection;
 import java.util.List;
@@ -37,7 +37,7 @@ import java.util.List;
  */
 @Internal
 public class SinkTransformation<T> extends StreamTransformation<Object> {
-
+	private static final Logger LOG = LoggerFactory.getLogger(SinkTransformation.class);
 	private final StreamTransformation<T> input;
 
 	private final StreamSink<T> operator;
@@ -63,8 +63,8 @@ public class SinkTransformation<T> extends StreamTransformation<Object> {
 		super(name, TypeExtractor.getForClass(Object.class), parallelism);
 		this.input = input;
 		this.operator = operator;
+		LOG.info("===SinkTransformation===66==="+input.getClass().getName()+"==="+operator.getClass().getName());//try { Integer.parseInt("SinkTransformation"); }catch (Exception e){LOG.error("===", e);}
 	}
-
 	/**
 	 * Returns the input {@code StreamTransformation} of this {@code SinkTransformation}.
 	 */

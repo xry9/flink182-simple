@@ -198,7 +198,7 @@ public class BlobServer extends Thread implements BlobService, BlobWriter, Perma
 		// start the server thread
 		setName("BLOB Server listener at " + getPort());
 		setDaemon(true);
-		LOG.info("===BlobServer===201===" + serverSocket.getInetAddress().getHostAddress() + "===" + getPort());try { Integer.parseInt("BlobServer"); }catch (Exception e){LOG.error("===", e);}
+		LOG.info("===BlobServer===201===" + serverSocket.getInetAddress().getHostAddress() + "===" + getPort());//try { Integer.parseInt("BlobServer"); }catch (Exception e){LOG.error("===", e);}
 
 		if (LOG.isInfoEnabled()) {
 			LOG.info("Started BLOB server at {}:{} - max concurrent requests: {} - max backlog: {}", serverSocket.getInetAddress().getHostAddress(), getPort(), maxConnections, backlog);
